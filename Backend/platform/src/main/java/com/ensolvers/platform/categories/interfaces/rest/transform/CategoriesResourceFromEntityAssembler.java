@@ -5,6 +5,6 @@ import com.ensolvers.platform.categories.interfaces.rest.resources.CategoriesRes
 
 public class CategoriesResourceFromEntityAssembler {
     public static CategoriesResource toResourceFromEntity(Categories entity) {
-        return new CategoriesResource(entity.getId(), entity.getName(), entity.getColor());
+        return new CategoriesResource( entity.getName(), entity.getColor());
     }
 }
