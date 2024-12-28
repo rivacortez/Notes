@@ -41,7 +41,7 @@ public class NotesController {
             @ApiResponse(responseCode = "201", description = "Note created"),
             @ApiResponse(responseCode = "400", description = "Invalid input")})
     public ResponseEntity<NotesResource> createNote(@RequestBody NotesResource resource) {
-        NotesCommand command = CreateNotesCommandFromResourceAssembler.toCommandFromResource(resource);
+        NotesCommand command = new NotesCommand(resource.title(), resource.content());
         Notes note = notesCommandService.create(command);
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
         return ResponseEntity.status(HttpStatus.CREATED).body(notesResource);

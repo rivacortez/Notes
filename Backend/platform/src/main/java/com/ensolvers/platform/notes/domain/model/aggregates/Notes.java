@@ -23,6 +23,10 @@ public class Notes extends AuditableModel {
     @Column(nullable = false)
     private Boolean archived = false;
 
+    public Notes() {
+        this.archived = false;
+    }
+
     // Getter and Setter methods
     public Long getId() {
         return id;

@@ -22,7 +22,7 @@ public class NotesCommandServiceImpl implements NotesCommandService {
         Notes note = new Notes();
         note.setTitle(resource.title());
         note.setContent(resource.content());
-        note.setArchived(resource.archived());
+        note.setArchived(resource.archived() != null ? resource.archived() : false);
         return notesRepository.save(note);
     }
 
