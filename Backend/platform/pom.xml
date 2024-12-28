@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ensolvers</groupId>
-    <artifactId>platform</artifactId>
+    <artifactId>Notes-Platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>platform</name>
-    <description>platform</description>
+    <name>Notes-Platform</name>
+    <description>Notes-Platform</description>
     <url/>
     <licenses>
         <license/>
