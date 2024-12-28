@@ -1,5 +1,4 @@
 package com.ensolvers.platform.shared.domain.model.aggregates;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,4 +23,16 @@ public class AuditableAbstractAggregateRoot<T extends AbstractAggregateRoot<T>> 
     @LastModifiedDate
     @Column(nullable = false)
     private Date updatedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    protected void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    protected void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
