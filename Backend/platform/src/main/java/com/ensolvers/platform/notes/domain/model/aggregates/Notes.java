@@ -1,13 +1,11 @@
 package com.ensolvers.platform.notes.domain.model.aggregates;
 
 
+import com.ensolvers.platform.categories.domain.model.aggregates.NoteCategory;
 import com.ensolvers.platform.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Set;
 
-@Getter
-@Setter
 @Entity
 public class Notes extends AuditableModel {
     @Id
@@ -23,13 +21,16 @@ public class Notes extends AuditableModel {
     @Column(nullable = false)
     private Boolean archived = false;
 
-    public Notes() {
-        this.archived = false;
-    }
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<NoteCategory> noteCategories;
 
     // Getter and Setter methods
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -54,5 +55,13 @@ public class Notes extends AuditableModel {
 
     public void setArchived(Boolean archived) {
         this.archived = archived;
+    }
+
+    public Set<NoteCategory> getNoteCategories() {
+        return noteCategories;
+    }
+
+    public void setNoteCategories(Set<NoteCategory> noteCategories) {
+        this.noteCategories = noteCategories;
     }
 }

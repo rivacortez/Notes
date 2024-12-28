@@ -1,5 +1,9 @@
 package com.ensolvers.platform.notes.application.internal.commandservices;
 
+import com.ensolvers.platform.categories.domain.model.aggregates.Categories;
+import com.ensolvers.platform.categories.domain.model.aggregates.NoteCategory;
+import com.ensolvers.platform.categories.domain.model.aggregates.NoteCategoryId;
+import com.ensolvers.platform.categories.infrastructure.persistence.jpa.repositories.CategoriesRepository;
 import com.ensolvers.platform.notes.domain.model.aggregates.Notes;
 import com.ensolvers.platform.notes.domain.model.commands.NotesCommand;
 import com.ensolvers.platform.notes.domain.model.commands.PatchNotesCommand;
@@ -12,9 +16,10 @@ import java.util.Optional;
 @Service
 public class NotesCommandServiceImpl implements NotesCommandService {
     private final NotesRepository notesRepository;
-
-    public NotesCommandServiceImpl(NotesRepository notesRepository) {
+   private final CategoriesRepository categoriesRepository;
+    public NotesCommandServiceImpl(NotesRepository notesRepository , CategoriesRepository categoriesRepository) {
         this.notesRepository = notesRepository;
+        this.categoriesRepository = categoriesRepository;
     }
 
     @Override
@@ -59,5 +64,26 @@ public class NotesCommandServiceImpl implements NotesCommandService {
     @Override
     public void delete(Long id) {
         notesRepository.deleteById(id);
+    }
+
+
+    @Override
+    public void associateWithCategory(Long noteId, Long categoryId) {
+        Notes note = notesRepository.findById(noteId).orElseThrow();
+        Categories category = categoriesRepository.findById(categoryId).orElseThrow();
+        NoteCategory noteCategory = new NoteCategory(new NoteCategoryId(noteId, categoryId), note, category);
+        note.getNoteCategories().add(noteCategory);
+        notesRepository.save(note);
+    }
+
+    @Override
+    public void disassociateFromCategory(Long noteId, Long categoryId) {
+        Notes note = notesRepository.findById(noteId).orElseThrow();
+        NoteCategory noteCategory = note.getNoteCategories().stream()
+                .filter(nc -> nc.getCategory().getId().equals(categoryId))
+                .findFirst()
+                .orElseThrow();
+        note.getNoteCategories().remove(noteCategory);
+        notesRepository.save(note);
     }
 }

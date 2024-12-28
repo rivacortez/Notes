@@ -1,6 +1,9 @@
 package com.ensolvers.platform.notes.interfaces.rest;
 
 
+import com.ensolvers.platform.categories.domain.model.aggregates.Categories;
+import com.ensolvers.platform.categories.interfaces.rest.resources.CategoriesResource;
+import com.ensolvers.platform.categories.interfaces.rest.transform.CategoriesResourceFromEntityAssembler;
 import com.ensolvers.platform.notes.domain.model.aggregates.Notes;
 import com.ensolvers.platform.notes.domain.model.commands.NotesCommand;
 import com.ensolvers.platform.notes.domain.model.commands.PatchNotesCommand;
@@ -9,6 +12,7 @@ import com.ensolvers.platform.notes.domain.services.NotesQueryService;
 import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
 import com.ensolvers.platform.notes.interfaces.rest.transform.CreateNotesCommandFromResourceAssembler;
 import com.ensolvers.platform.notes.interfaces.rest.transform.NotesResourceFromEntityAssembler;
+import com.ensolvers.platform.shared.interfaces.rest.resources.MessageResource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -92,4 +96,41 @@ public class NotesController {
                 .toList();
         return ResponseEntity.ok(notesResources);
     }
+
+
+
+    @PostMapping("/{noteId}/categories/{categoryId}")
+    @Operation(summary = "Associate a note with a category", description = "Associate a note with a category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Note associated with category successfully"),
+            @ApiResponse(responseCode = "404", description = "Note or category not found")})
+    public ResponseEntity<MessageResource> associateNoteWithCategory(@PathVariable Long noteId, @PathVariable Long categoryId) {
+        notesCommandService.associateWithCategory(noteId, categoryId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResource("The note was successfully associated with the category."));
+    }
+
+
+    @DeleteMapping("/{noteId}/categories/{categoryId}")
+    @Operation(summary = "Disassociate a note from a category", description = "Disassociate a note from a category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Association removed successfully"),
+            @ApiResponse(responseCode = "404", description = "Note or category not found")})
+    public ResponseEntity<Void> disassociateNoteFromCategory(@PathVariable Long noteId, @PathVariable Long categoryId) {
+        notesCommandService.disassociateFromCategory(noteId, categoryId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{noteId}/categories")
+    @Operation(summary = "Get categories of a note", description = "Get categories associated with a note")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Categories found"),
+            @ApiResponse(responseCode = "404", description = "Note not found")})
+    public ResponseEntity<List<CategoriesResource>> getCategoriesOfNote(@PathVariable Long noteId) {
+        List<Categories> categories = notesQueryService.getCategoriesOfNote(noteId);
+        List<CategoriesResource> categoriesResources = categories.stream()
+                .map(CategoriesResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(categoriesResources);
+    }
+
 }

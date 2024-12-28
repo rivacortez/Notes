@@ -6,6 +6,8 @@ import com.ensolvers.platform.categories.domain.services.CategoriesCommandServic
 import com.ensolvers.platform.categories.domain.services.CategoriesQueryService;
 import com.ensolvers.platform.categories.interfaces.rest.resources.CategoriesResource;
 import com.ensolvers.platform.categories.interfaces.rest.transform.CategoriesResourceFromEntityAssembler;
+import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
+import com.ensolvers.platform.notes.interfaces.rest.transform.NotesResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,7 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.ensolvers.platform.notes.domain.model.aggregates.Notes;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -110,4 +112,19 @@ public class CategoriesController {
                 .toList();
         return ResponseEntity.ok(categoriesResources);
     }
+
+
+    @GetMapping("/{categoryId}/notes")
+    @Operation(summary = "Get notes of a category", description = "Get notes associated with a category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notes found"),
+            @ApiResponse(responseCode = "404", description = "Category not found")})
+    public ResponseEntity<List<NotesResource>> getNotesOfCategory(@PathVariable Long categoryId) {
+        List<Notes> notes = categoriesQueryService.getNotesOfCategory(categoryId);
+        List<NotesResource> notesResources = notes.stream()
+                .map(NotesResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(notesResources);
+    }
+
 }

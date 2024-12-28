@@ -11,4 +11,6 @@ public interface NotesCommandService {
     Optional<Notes> patch(Long id, PatchNotesCommand resource);
     Notes archive(Long id, Boolean archived);
     void delete(Long id);
+    void associateWithCategory(Long noteId, Long categoryId);
+    void disassociateFromCategory(Long noteId, Long categoryId);
 }
