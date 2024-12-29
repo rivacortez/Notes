@@ -1,0 +1,28 @@
+<div #container class="container">
+  <div class="forms-container">
+    <div class="signin-signup">
+      <form [formGroup]="signInForm" (ngSubmit)="onSubmitSignIn()" class="sign-in-form">
+        <h2 class="title">Login</h2>
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input type="text" formControlName="username" placeholder="Username" required />
+        </div>
+        <div class="input-field">
+          <i class="fas fa-lock"></i>
+          <input type="password" formControlName="password" placeholder="Password" required />
+        </div>
+        <input type="submit" value="Login" class="btn solid" />
+        <button #signUpBtn class="btn transparent" (click)="onSignUp()">Register</button>
+      </form>
+    </div>
+  </div>
+  <div class="panels-container">
+    <div class="panel left-panel">
+      <div class="content">
+        <h3>Don't have an account yet?</h3>
+        <p></p>
+        <button class="btn transparent" (click)="onSignUp()">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
