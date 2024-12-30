@@ -79,7 +79,7 @@ export class AuthenticationService {
 
         this.setUserId(response.id);
 
-        this.router.navigate(['/home']).then();
+        this.router.navigate(['/notes-home']).then();
       })
     );
   }
