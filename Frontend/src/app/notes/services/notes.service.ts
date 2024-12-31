@@ -11,6 +11,11 @@ export class NotesService extends BaseService<NotesEntity> {
 
   protected override resourceEndpoint = '/notes';
 
+
+  override create(note: NotesEntity): Observable<NotesEntity> {
+    return this.http.post<NotesEntity>(this.resourcePath(), note, this.httOptions)
+      .pipe(retry(2), catchError(this.handleError));
+  }
   associateNoteWithCategory(noteId: number, categoryId: number): Observable<void> {
     return this.http.post<void>(`${this.basePath}${this.resourceEndpoint}/${noteId}/categories/${categoryId}`, {}, this.httOptions)
       .pipe(retry(2), catchError(this.handleError));

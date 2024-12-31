@@ -5,6 +5,8 @@ import com.ensolvers.platform.categories.domain.model.aggregates.Categories;
 import com.ensolvers.platform.categories.domain.services.CategoriesCommandService;
 import com.ensolvers.platform.categories.domain.services.CategoriesQueryService;
 import com.ensolvers.platform.categories.interfaces.rest.resources.CategoriesResource;
+import com.ensolvers.platform.categories.interfaces.rest.resources.CreateCategoriesResource;
+import com.ensolvers.platform.categories.interfaces.rest.resources.UpdateCategoriesResource;
 import com.ensolvers.platform.categories.interfaces.rest.transform.CategoriesResourceFromEntityAssembler;
 import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
 import com.ensolvers.platform.notes.interfaces.rest.transform.NotesResourceFromEntityAssembler;
@@ -56,7 +58,7 @@ public class CategoriesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category created"),
             @ApiResponse(responseCode = "400", description = "Invalid input")})
-    public ResponseEntity<CategoriesResource> createCategory(@RequestBody CategoriesResource resource) {
+    public ResponseEntity<CategoriesResource> createCategory(@RequestBody CreateCategoriesResource resource) {
         Categories category = categoriesCommandService.create(resource);
         CategoriesResource categoriesResource = CategoriesResourceFromEntityAssembler.toResourceFromEntity(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriesResource);
@@ -69,12 +71,13 @@ public class CategoriesController {
      * @param resource The {@link CategoriesResource} instance
      * @return The {@link CategoriesResource} resource for the updated category
      */
+
     @PutMapping("/{id}")
     @Operation(summary = "Update category", description = "Update category")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category updated"),
             @ApiResponse(responseCode = "404", description = "Category not found")})
-    public ResponseEntity<CategoriesResource> updateCategory(@PathVariable Long id, @RequestBody CategoriesResource resource) {
+    public ResponseEntity<CategoriesResource> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoriesResource resource) {
         Categories category = categoriesCommandService.update(id, resource);
         CategoriesResource categoriesResource = CategoriesResourceFromEntityAssembler.toResourceFromEntity(category);
         return ResponseEntity.ok(categoriesResource);

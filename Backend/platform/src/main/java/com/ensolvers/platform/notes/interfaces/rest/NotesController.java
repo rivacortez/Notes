@@ -9,7 +9,9 @@ import com.ensolvers.platform.notes.domain.model.commands.NotesCommand;
 import com.ensolvers.platform.notes.domain.model.commands.PatchNotesCommand;
 import com.ensolvers.platform.notes.domain.services.NotesCommandService;
 import com.ensolvers.platform.notes.domain.services.NotesQueryService;
+import com.ensolvers.platform.notes.interfaces.rest.resources.CreateNotesResource;
 import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
+import com.ensolvers.platform.notes.interfaces.rest.resources.UpdateNotesResource;
 import com.ensolvers.platform.notes.interfaces.rest.transform.CreateNotesCommandFromResourceAssembler;
 import com.ensolvers.platform.notes.interfaces.rest.transform.NotesResourceFromEntityAssembler;
 import com.ensolvers.platform.shared.interfaces.rest.resources.MessageResource;
@@ -44,8 +46,8 @@ public class NotesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Note created"),
             @ApiResponse(responseCode = "400", description = "Invalid input")})
-    public ResponseEntity<NotesResource> createNote(@RequestBody NotesResource resource) {
-        NotesCommand command = new NotesCommand(resource.title(), resource.content());
+    public ResponseEntity<NotesResource> createNote(@RequestBody CreateNotesResource resource) {
+        NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived());
         Notes note = notesCommandService.create(command);
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
         return ResponseEntity.status(HttpStatus.CREATED).body(notesResource);
@@ -56,7 +58,7 @@ public class NotesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Note updated"),
             @ApiResponse(responseCode = "404", description = "Note not found")})
-    public ResponseEntity<NotesResource> updateNote(@PathVariable Long id, @RequestBody NotesResource resource) {
+    public ResponseEntity<NotesResource> updateNote(@PathVariable Long id, @RequestBody UpdateNotesResource resource) {
         NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived());
         Notes note = notesCommandService.update(id, command);
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);

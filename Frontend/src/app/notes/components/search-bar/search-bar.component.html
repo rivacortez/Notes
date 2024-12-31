@@ -1,13 +1,41 @@
-<div class="search-bar-container">
-  <input type="text" placeholder="Search notes..." class="search-input" [(ngModel)]="searchQuery" (input)="onSearchInput()" />
-  <div class="category-buttons">
-    <button class="category-button" [class.active]="selectedCategory === 'Todas'" (click)="onCategorySelect('Todas')">Todas</button>
-    <button *ngFor="let category of categories" class="category-button" [class.active]="selectedCategory === category.name" (click)="onCategorySelect(category.name)">
-      {{ category.name }}
-      <span class="delete-category" (click)="onCategoryDelete(category.name, $event)">×</span>
-    </button>
-    <button class="add-category-button" (click)="onAddCategoryClick()">+ Nueva Categoría</button>
+<div class="search-bar-wrapper">
+  <div class="search-bar-container">
+    <input
+      type="text"
+      placeholder="Search notes..."
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (input)="onSearchInput()"
+    />
+    <div class="category-buttons">
+      <button
+        class="category-button"
+        [class.active]="selectedCategory === 'All'"
+        (click)="onCategorySelect('All')"
+      >
+        All
+      </button>
+      <button
+        *ngFor="let category of categories"
+        class="category-button"
+        [class.active]="selectedCategory === category.name"
+        (click)="onCategorySelect(category.name)"
+      >
+        {{ category.name }}
+        <span
+          class="delete-category"
+          (click)="onCategoryDelete(category.name, $event)"
+        >×</span>
+      </button>
+      <button class="add-category-button" (click)="onAddCategoryClick()">
+        + Nueva Categoría
+      </button>
+    </div>
   </div>
 </div>
 
-<app-add-category-dialog *ngIf="showAddCategoryDialog" (close)="onDialogClose()" (categoryAdded)="onCategoryAdded($event)"></app-add-category-dialog>
+<app-add-category-dialog
+  *ngIf="showAddCategoryDialog"
+  (close)="onDialogClose()"
+  (categoryAdded)="onCategoryAdded($event)"
+></app-add-category-dialog>

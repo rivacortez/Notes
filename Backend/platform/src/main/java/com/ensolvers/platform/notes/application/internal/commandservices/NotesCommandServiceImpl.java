@@ -9,6 +9,7 @@ import com.ensolvers.platform.notes.domain.model.commands.NotesCommand;
 import com.ensolvers.platform.notes.domain.model.commands.PatchNotesCommand;
 import com.ensolvers.platform.notes.domain.services.NotesCommandService;
 import com.ensolvers.platform.notes.infrastructure.persistence.jpa.repositories.NotesRepository;
+import com.ensolvers.platform.notes.interfaces.rest.resources.UpdateNotesResource;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,8 +17,9 @@ import java.util.Optional;
 @Service
 public class NotesCommandServiceImpl implements NotesCommandService {
     private final NotesRepository notesRepository;
-   private final CategoriesRepository categoriesRepository;
-    public NotesCommandServiceImpl(NotesRepository notesRepository , CategoriesRepository categoriesRepository) {
+    private final CategoriesRepository categoriesRepository;
+
+    public NotesCommandServiceImpl(NotesRepository notesRepository, CategoriesRepository categoriesRepository) {
         this.notesRepository = notesRepository;
         this.categoriesRepository = categoriesRepository;
     }
@@ -32,11 +34,11 @@ public class NotesCommandServiceImpl implements NotesCommandService {
     }
 
     @Override
-    public Notes update(Long id, NotesCommand resource) {
+    public Notes update(Long id, NotesCommand command) {
         Notes note = notesRepository.findById(id).orElseThrow();
-        note.setTitle(resource.title());
-        note.setContent(resource.content());
-        note.setArchived(resource.archived());
+        note.setTitle(command.title());
+        note.setContent(command.content());
+        note.setArchived(command.archived());
         return notesRepository.save(note);
     }
 
@@ -65,7 +67,6 @@ public class NotesCommandServiceImpl implements NotesCommandService {
     public void delete(Long id) {
         notesRepository.deleteById(id);
     }
-
 
     @Override
     public void associateWithCategory(Long noteId, Long categoryId) {

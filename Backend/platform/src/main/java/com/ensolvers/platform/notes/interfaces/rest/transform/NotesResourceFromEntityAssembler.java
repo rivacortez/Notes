@@ -6,6 +6,7 @@ import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
 public class NotesResourceFromEntityAssembler {
     public static NotesResource toResourceFromEntity(Notes entity) {
         return new NotesResource(
+                entity.getId(),
                 entity.getTitle(),
                 entity.getContent(),
                 entity.getArchived()

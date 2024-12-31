@@ -17,12 +17,9 @@
   border-radius: 12px;
   width: 400px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out;
+
 }
 
-.dialog-box:hover {
-  transform: scale(1.02);
-}
 
 .dialog-title {
   text-align: center;

@@ -20,10 +20,6 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.dialog-box:hover {
-  transform: scale(1.02);
-}
-
 .dialog-title {
   text-align: center;
   font-size: 1.5em;
