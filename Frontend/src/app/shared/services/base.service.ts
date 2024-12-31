@@ -4,13 +4,9 @@ import { environment } from "../../../environments/environment";
 import { catchError, Observable, retry, throwError } from "rxjs";
 
 export class BaseService<T> {
-
   protected httOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-
   protected http: HttpClient = inject(HttpClient);
-
   protected basePath: string = `${environment.serverBasePath}`;
-
   protected resourceEndpoint: string = '/resources';
 
   protected handleError(error: HttpErrorResponse) {

@@ -11,7 +11,7 @@ import {NotesService} from '../../services/notes.service';
   templateUrl: './add-note-dialog.component.html',
   styleUrl: './add-note-dialog.component.css'
 })
-export class AddNoteDialogComponent {
+export class AddNoteDialogComponent{
   @Output() close = new EventEmitter<void>();
   @Output() noteAdded = new EventEmitter<NotesEntity>();
 

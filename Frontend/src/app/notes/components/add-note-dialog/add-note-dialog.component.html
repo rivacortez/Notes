@@ -4,18 +4,18 @@
 
     <form #noteForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="noteTitle">Tittle:</label>
-        <input type="text" id="noteTitle" name="noteTitle" ngModel required class="form-control" placeholder="Ingrese el título de la nota">
+        <label for="noteTitle">Title:</label>
+        <input type="text" id="noteTitle" name="noteTitle" [(ngModel)]="noteTitle" required class="form-control" placeholder="Enter note title">
       </div>
 
       <div class="form-group">
-        <label for="noteContent">Contenido de la Nota:</label>
-        <textarea id="noteContent" name="noteContent" ngModel required class="form-control" placeholder="Ingrese el contenido de la nota"></textarea>
+        <label for="noteContent">Note Content:</label>
+        <textarea id="noteContent" name="noteContent" [(ngModel)]="noteContent" required class="form-control" placeholder="Enter note content"></textarea>
       </div>
 
       <div class="dialog-actions">
-        <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancelar</button>
-        <button type="submit" [disabled]="!noteForm.valid" class="btn btn-primary">Guardar</button>
+        <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancel</button>
+        <button type="submit" [disabled]="!noteForm.valid" class="btn btn-primary">Save</button>
       </div>
     </form>
   </div>

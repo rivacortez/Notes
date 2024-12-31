@@ -4,4 +4,4 @@
   </button>
 </div>
 
-<app-add-note-dialog *ngIf="showAddNoteDialog" (close)="onDialogClose()"></app-add-note-dialog>
+<app-add-note-dialog *ngIf="showAddNoteDialog" (close)="onDialogClose()" (noteAdded)="onNoteAdded($event)"></app-add-note-dialog>

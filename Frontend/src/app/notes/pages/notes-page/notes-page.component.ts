@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {SearchBarComponent} from '../../components/search-bar/search-bar.component';
 import {NotesListComponent} from '../../components/notes-list/notes-list.component';
 import {FloatingActionButtonComponent} from '../../components/floating-action-button/floating-action-button.component';
+import {NotesEntity} from '../../model/notes.entity';
 
 @Component({
   selector: 'app-notes-page',
@@ -14,5 +15,9 @@ import {FloatingActionButtonComponent} from '../../components/floating-action-bu
   styleUrl: './notes-page.component.css'
 })
 export class NotesPageComponent {
+  @ViewChild(NotesListComponent) notesListComponent!: NotesListComponent;
 
+  onNoteAdded(note: NotesEntity): void {
+    this.notesListComponent.notes.push(note);
+  }
 }

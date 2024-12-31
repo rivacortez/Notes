@@ -1,8 +1,11 @@
+
+
 export class NotesEntity {
   id: number;
   title: string;
   content: string;
   archived: boolean;
+
 
   constructor(data: { id?: number, title?: string, content?: string, archived?: boolean } = {}) {
     this.id = data.id || 0;
