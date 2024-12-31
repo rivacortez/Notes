@@ -1,1 +1,7 @@
-<p>floating-action-button works!</p>
+<div class="fab-container">
+  <button class="fab" (click)="onFabClick()">
+    <span>+</span>
+  </button>
+</div>
+
+<app-add-note-dialog *ngIf="showAddNoteDialog" (close)="onDialogClose()"></app-add-note-dialog>

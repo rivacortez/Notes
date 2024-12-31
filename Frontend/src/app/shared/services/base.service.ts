@@ -1,7 +1,7 @@
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {inject} from "@angular/core";
-import {environment} from "../../../environments/environment";
-import {catchError, Observable, retry, throwError} from "rxjs";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { environment } from "../../../environments/environment";
+import { catchError, Observable, retry, throwError } from "rxjs";
 
 export class BaseService<T> {
 
@@ -22,7 +22,7 @@ export class BaseService<T> {
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
-  private resourcePath() {
+  protected resourcePath() {
     return `${this.basePath}${this.resourceEndpoint}`;
   }
 

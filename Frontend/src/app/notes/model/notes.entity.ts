@@ -1,15 +1,13 @@
 export class NotesEntity {
-
   id: number;
-  name: string;
-  color: string;
+  title: string;
+  content: string;
+  archived: boolean;
 
-
-
-  constructor(data: { id?: number, name?: string,color?: string } = {}) {
+  constructor(data: { id?: number, title?: string, content?: string, archived?: boolean } = {}) {
     this.id = data.id || 0;
-    this.name = data.name || '';
-    this.color = data.color || '';
-
-}
+    this.title = data.title || '';
+    this.content = data.content || '';
+    this.archived = data.archived || false;
+  }
 }

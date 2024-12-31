@@ -8,6 +8,7 @@ import com.ensolvers.platform.categories.interfaces.rest.resources.CategoriesRes
 import com.ensolvers.platform.categories.interfaces.rest.transform.CategoriesResourceFromEntityAssembler;
 import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
 import com.ensolvers.platform.notes.interfaces.rest.transform.NotesResourceFromEntityAssembler;
+import com.ensolvers.platform.shared.interfaces.rest.resources.MessageResource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -90,9 +91,9 @@ public class CategoriesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category deleted"),
             @ApiResponse(responseCode = "404", description = "Category not found")})
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<MessageResource> deleteCategory(@PathVariable Long id) {
         categoriesCommandService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MessageResource("Category deleted successfully"));
     }
 
     /**

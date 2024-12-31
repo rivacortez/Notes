@@ -25,4 +25,9 @@ export class NotesService extends BaseService<NotesEntity> {
     return this.http.patch<void>(`${this.basePath}${this.resourceEndpoint}/${id}/archive`, {}, this.httOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
+
+  override getAll(): Observable<NotesEntity[]> {
+    return this.http.get<NotesEntity[]>(this.resourcePath())
+      .pipe(retry(2), catchError(this.handleError));
+  }
 }
