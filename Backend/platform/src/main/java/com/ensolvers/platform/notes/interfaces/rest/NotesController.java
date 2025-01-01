@@ -105,7 +105,7 @@ public class NotesController {
                 .map(NotesResourceFromEntityAssembler::toResourceFromEntity)
                 .toList();
         return ResponseEntity.ok(notesResources);
-    }
+    }   
 
 
 
