@@ -49,6 +49,14 @@ public class NotesController {
     public ResponseEntity<NotesResource> createNote(@RequestBody CreateNotesResource resource) {
         NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived());
         Notes note = notesCommandService.create(command);
+
+
+        if (resource.idCategories() != null) {
+            for (Long categoryId : resource.idCategories()) {
+                notesCommandService.associateWithCategory(note.getId(), categoryId);
+            }
+        }
+
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
         return ResponseEntity.status(HttpStatus.CREATED).body(notesResource);
     }
@@ -91,8 +99,8 @@ public class NotesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Notes found"),
             @ApiResponse(responseCode = "404", description = "Notes not found")})
-    public ResponseEntity<List<NotesResource>> getAllNotes(@RequestParam(required = false) Boolean archived) {
-        List<Notes> notes = notesQueryService.findAll(archived);
+    public ResponseEntity<List<NotesResource>> getAllNotes() {
+        List<Notes> notes = notesQueryService.findAll(null);
         List<NotesResource> notesResources = notes.stream()
                 .map(NotesResourceFromEntityAssembler::toResourceFromEntity)
                 .toList();

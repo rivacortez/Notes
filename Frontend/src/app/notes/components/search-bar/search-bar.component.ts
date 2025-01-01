@@ -93,18 +93,29 @@ export class SearchBarComponent implements OnInit {
   }
 
   toggleArchive(): void {
-    this.archiveButtonText = this.archiveButtonText === 'Archived' ? 'Unarchived' : 'Archived';
-    this.notesService.getAll().subscribe({
-      next: (notes: NotesEntity[]) => {
-        const filteredNotes = this.archiveButtonText === 'Archived'
-          ? notes.filter(note => note.archived)
-          : notes;
-        this.notesFiltered.emit(filteredNotes);
-      },
-      error: (error: any) => {
-        console.error('Error loading notes:', error);
-      }
-    });
+    if (this.archiveButtonText === 'Archived') {
+      this.archiveButtonText = 'Unarchived';
+      this.notesService.getAll().subscribe({
+        next: (notes: NotesEntity[]) => {
+          const filteredNotes = notes.filter(note => note.archived);
+          this.notesFiltered.emit(filteredNotes);
+        },
+        error: (error: any) => {
+          console.error('Error loading notes:', error);
+        }
+      });
+    } else {
+      this.archiveButtonText = 'Archived';
+      this.notesService.getAll().subscribe({
+        next: (notes: NotesEntity[]) => {
+          const filteredNotes = notes.filter(note => !note.archived);
+          this.notesFiltered.emit(filteredNotes);
+        },
+        error: (error: any) => {
+          console.error('Error loading notes:', error);
+        }
+      });
+    }
   }
 
   onDialogClose(): void {

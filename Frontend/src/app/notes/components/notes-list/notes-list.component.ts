@@ -30,7 +30,7 @@ export class NotesListComponent implements OnInit {
   loadNotes(): void {
     this.notesService.getAll().subscribe({
       next: (notes: NotesEntity[]) => {
-        this.notes = notes;
+        this.notes = notes.filter(note => !note.archived);
       },
       error: (error: any) => {
         console.error('Error loading notes:', error);
@@ -88,11 +88,8 @@ export class NotesListComponent implements OnInit {
   archiveNote(note: NotesEntity): void {
     note.archived = true;
     this.notesService.updateNote(note.id, note).subscribe({
-      next: (updatedNote: NotesEntity) => {
-        const index = this.notes.findIndex(n => n.id === updatedNote.id);
-        if (index !== -1) {
-          this.notes[index] = updatedNote;
-        }
+      next: () => {
+        this.loadNotes();
       },
       error: (error: any) => {
         console.error('Error archiving note:', error);
