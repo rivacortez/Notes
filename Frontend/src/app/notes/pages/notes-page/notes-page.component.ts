@@ -20,4 +20,8 @@ export class NotesPageComponent {
   onNoteAdded(note: NotesEntity): void {
     this.notesListComponent.notes.push(note);
   }
+
+  onNotesFiltered(filteredNotes: NotesEntity[]): void {
+    this.notesListComponent.notes = filteredNotes;
+  }
 }

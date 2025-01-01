@@ -2,88 +2,82 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
- max-width: 1920px;
+  max-width: 1920px;
   margin: 0 auto;
+  padding: 16px;
 }
 
-
-.search-input {
+.search-bar {
   width: 100%;
   padding: 14px 16px;
   border: 1px solid #dddddd;
   border-radius: 8px;
   font-size: 16px;
   background-color: #fafafa;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.search-input:focus {
+.search-bar:focus {
   border-color: #4285f4;
   box-shadow: 0px 0px 4px rgba(66, 133, 244, 0.3);
   outline: none;
 }
 
-.category-buttons {
+.categories {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
 }
 
-.category-button {
+.category-btn, .add-category-btn {
   padding: 10px 20px;
-  border: 1px solid #cccccc;
   border-radius: 20px;
-  background-color: #ffffff;
   font-size: 14px;
   font-weight: 500;
-  color: #555555;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  color: #555555;
 }
 
-.category-button:hover {
+.category-btn:hover, .add-category-btn:hover {
   background-color: #eef6ff;
   border-color: #4285f4;
   color: #4285f4;
 }
 
-.category-button.active {
+.category-btn.active {
   background-color: #4285f4;
   color: #ffffff;
   border-color: #4285f4;
 }
 
-.add-category-button {
-  padding: 10px 20px;
+.add-category-btn {
   border: 2px dashed #cccccc;
-  border-radius: 20px;
-  background-color: transparent;
   font-size: 14px;
-  font-weight: 500;
-  color: #555555;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.add-category-button:hover {
-  background-color: #eef6ff;
-  border-color: #4285f4;
-  color: #4285f4;
-}
-
-.category-button-wrapper {
   display: flex;
   align-items: center;
-  position: relative;
+  gap: 8px;
 }
 
-.delete-category-button {
+.add-category-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.category-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.delete-category-btn {
   position: absolute;
   right: -8px;
   top: -8px;
@@ -100,30 +94,21 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.delete-category-button:hover {
+.delete-category-btn:hover {
   background-color: #d32f2f;
   transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
-  .search-bar-container {
-    padding: 16px;
-  }
-
-  .category-buttons {
-    gap: 8px;
-  }
-
-  .category-button,
-  .add-category-button {
+  .category-btn, .add-category-btn {
     padding: 8px 16px;
     font-size: 13px;
   }
 
-  .delete-category-button {
+  .delete-category-btn {
     width: 18px;
     height: 18px;
     font-size: 10px;

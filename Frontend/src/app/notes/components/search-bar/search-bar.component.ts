@@ -1,9 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriesEntity } from '../../model/categories.entity';
 import { CategoriesService } from '../../services/categories.service';
 import {AddCategoryDialogComponent} from '../add-category-dialog/add-category-dialog.component';
+import {NotesService} from '../../services/notes.service';
+import {NotesEntity} from '../../model/notes.entity';
 
 @Component({
   selector: 'app-search-bar',
@@ -18,13 +20,18 @@ import {AddCategoryDialogComponent} from '../add-category-dialog/add-category-di
 })
 export class SearchBarComponent implements OnInit {
   @ViewChild(AddCategoryDialogComponent) addCategoryDialog!: AddCategoryDialogComponent;
+  @Output() notesFiltered = new EventEmitter<NotesEntity[]>();
 
   categories: CategoriesEntity[] = [];
   selectedCategory: CategoriesEntity | null = null;
   searchQuery: string = '';
   showAddCategoryDialog: boolean = false;
+  archiveButtonText: string = 'Archived';
 
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private notesService: NotesService
+  ) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -85,11 +92,26 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  onDialogClose() {
+  toggleArchive(): void {
+    this.archiveButtonText = this.archiveButtonText === 'Archived' ? 'Unarchived' : 'Archived';
+    this.notesService.getAll().subscribe({
+      next: (notes: NotesEntity[]) => {
+        const filteredNotes = this.archiveButtonText === 'Archived'
+          ? notes.filter(note => note.archived)
+          : notes;
+        this.notesFiltered.emit(filteredNotes);
+      },
+      error: (error: any) => {
+        console.error('Error loading notes:', error);
+      }
+    });
+  }
+
+  onDialogClose(): void {
     this.closeCategoryModal();
   }
 
-  onCategoryAdded($event: CategoriesEntity) {
-    this.handleCategoryAdded($event);
+  onCategoryAdded(event: CategoriesEntity): void {
+    this.handleCategoryAdded(event);
   }
 }

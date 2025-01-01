@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NotesEntity} from '../../model/notes.entity';
 import {NotesService} from '../../services/notes.service';
 import {NgForOf, NgIf} from '@angular/common';
@@ -15,7 +15,7 @@ import {CategoriesEntity} from '../../model/categories.entity';
   styleUrl: './notes-list.component.css'
 })
 export class NotesListComponent implements OnInit {
-  notes: NotesEntity[] = [];
+  @Input() notes: NotesEntity[] = [];
   showAddCategoryDialog = false;
   showAddNoteDialog = false;
   newNote: NotesEntity = new NotesEntity();
@@ -33,7 +33,7 @@ export class NotesListComponent implements OnInit {
         this.notes = notes;
       },
       error: (error: any) => {
-        console.error('Error loading notes', error);
+        console.error('Error loading notes:', error);
       }
     });
   }
@@ -53,7 +53,7 @@ export class NotesListComponent implements OnInit {
         this.closeAddNoteDialog();
       },
       error: (error: any) => {
-        console.error('Error creating note', error);
+        console.error('Error creating note:', error);
       }
     });
   }
@@ -75,10 +75,28 @@ export class NotesListComponent implements OnInit {
   }
 
   deleteNote(note: NotesEntity): void {
-    // Implement delete
+    this.notesService.delete(note.id).subscribe({
+      next: () => {
+        this.notes = this.notes.filter(n => n.id !== note.id);
+      },
+      error: (error: any) => {
+        console.error('Error deleting note:', error);
+      }
+    });
   }
 
   archiveNote(note: NotesEntity): void {
-    // Implement archive
+    note.archived = true;
+    this.notesService.updateNote(note.id, note).subscribe({
+      next: (updatedNote: NotesEntity) => {
+        const index = this.notes.findIndex(n => n.id === updatedNote.id);
+        if (index !== -1) {
+          this.notes[index] = updatedNote;
+        }
+      },
+      error: (error: any) => {
+        console.error('Error archiving note:', error);
+      }
+    });
   }
 }

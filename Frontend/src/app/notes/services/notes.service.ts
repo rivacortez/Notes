@@ -15,23 +15,18 @@ export class NotesService extends BaseService<NotesEntity> {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  associateNoteWithCategory(noteId: number, categoryId: number): Observable<void> {
-    return this.http.post<void>(`${this.basePath}${this.resourceEndpoint}/${noteId}/categories/${categoryId}`, {}, this.httOptions)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  disassociateNoteFromCategory(noteId: number, categoryId: number): Observable<void> {
-    return this.http.delete<void>(`${this.basePath}${this.resourceEndpoint}/${noteId}/categories/${categoryId}`, this.httOptions)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  archiveNote(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.basePath}${this.resourceEndpoint}/${id}/archive`, {}, this.httOptions)
+  updateNote(id: number, note: NotesEntity): Observable<NotesEntity> {
+    return this.http.put<NotesEntity>(`${this.resourcePath()}/${id}`, note, this.httOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 
   override getAll(): Observable<NotesEntity[]> {
     return this.http.get<NotesEntity[]>(this.resourcePath())
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  public override delete(id: any): Observable<any> {
+    return this.http.delete(`${this.resourcePath()}/${id}`, this.httOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 }
