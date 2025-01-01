@@ -47,11 +47,32 @@ export class SearchBarComponent implements OnInit {
 
   onSearch(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    this.searchQuery = inputElement.value;
+    this.searchQuery = inputElement.value.toLowerCase();
+    this.filterNotes();
   }
 
   selectCategory(category: CategoriesEntity | null): void {
     this.selectedCategory = category;
+    this.filterNotes();
+  }
+
+
+  filterNotes(): void {
+    this.notesService.getAll().subscribe({
+      next: (notes: NotesEntity[]) => {
+        let filteredNotes = notes;
+        if (this.selectedCategory) {
+          filteredNotes = filteredNotes.filter(note => note.idCategories.includes(this.selectedCategory!.id));
+        }
+        if (this.searchQuery) {
+          filteredNotes = filteredNotes.filter(note => note.title.toLowerCase().includes(this.searchQuery) || note.content.toLowerCase().includes(this.searchQuery));
+        }
+        this.notesFiltered.emit(filteredNotes);
+      },
+      error: (error: any) => {
+        console.error('Error filtering notes:', error);
+      }
+    });
   }
 
   openCategoryModal(): void {
@@ -114,4 +135,5 @@ export class SearchBarComponent implements OnInit {
   onCategoryAdded(event: CategoriesEntity): void {
     this.handleCategoryAdded(event);
   }
+
 }

@@ -1,16 +1,16 @@
 <div class="search-bar-container">
-  <input type="text" class="search-bar" placeholder="Buscar notas..." (input)="onSearch($event)">
+  <input type="text" class="search-bar" placeholder="Search note..." (input)="onSearch($event)">
   <div class="categories">
-    <button class="category-btn active" (click)="selectCategory(null)">Todas</button>
+    <button class="category-btn" [class.active]="!selectedCategory" (click)="selectCategory(null)">All</button>
     <div class="category-btn-wrapper" *ngFor="let category of categories">
-      <button class="category-btn" (click)="selectCategory(category)">{{ category.name }}</button>
+      <button class="category-btn" [class.active]="selectedCategory?.id === category.id" (click)="selectCategory(category)">{{ category.name }}</button>
       <button class="delete-category-btn" (click)="deleteCategory(category.id)">X</button>
     </div>
     <button class="add-category-btn" (click)="openCategoryModal()">
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
       </svg>
-      Nueva Categoría
+      New Category
     </button>
   </div>
   <button class="archive-btn" (click)="toggleArchive()">{{ archiveButtonText }}</button>
