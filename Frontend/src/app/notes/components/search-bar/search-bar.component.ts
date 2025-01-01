@@ -34,11 +34,7 @@ export class SearchBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
-  }
-
-  private loadCategories(): void {
-    this.categoriesService.getAllCategories().subscribe({
+    this.categoriesService.categories$.subscribe({
       next: (categories: CategoriesEntity[]) => {
         this.categories = categories;
       },
@@ -46,17 +42,16 @@ export class SearchBarComponent implements OnInit {
         console.error('Error loading categories:', error);
       }
     });
+    this.categoriesService.loadCategories();
   }
 
   onSearch(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.searchQuery = inputElement.value;
-    // Implement search logic
   }
 
   selectCategory(category: CategoriesEntity | null): void {
     this.selectedCategory = category;
-    // Implement category selection
   }
 
   openCategoryModal(): void {
@@ -70,15 +65,9 @@ export class SearchBarComponent implements OnInit {
   }
 
   handleCategoryAdded(newCategory: CategoriesEntity): void {
-    this.categoriesService.createCategory(newCategory).subscribe({
-      next: (createdCategory: CategoriesEntity) => {
-        this.categories.push(createdCategory);
-        this.closeCategoryModal();
-      },
-      error: (error: any) => {
-        console.error('Error creating category:', error);
-      }
-    });
+    if (!this.categories.some(category => category.id === newCategory.id)) {
+      this.categories.push(newCategory);
+    }
   }
 
   deleteCategory(categoryId: number): void {

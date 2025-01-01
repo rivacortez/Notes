@@ -7,7 +7,7 @@ import {NotesEntity} from '../../model/notes.entity';
   selector: 'app-floating-action-button',
   imports: [
     AddNoteDialogComponent,
-    NgIf
+
   ],
   templateUrl: './floating-action-button.component.html',
   styleUrl: './floating-action-button.component.css'

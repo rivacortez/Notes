@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../../shared/services/base.service';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { CategoriesEntity } from '../model/categories.entity';
 import { NotesEntity } from '../model/notes.entity';
@@ -11,11 +11,25 @@ import { NotesEntity } from '../model/notes.entity';
 export class CategoriesService extends BaseService<CategoriesEntity> {
 
   protected override resourceEndpoint = '/categories';
+  private categoriesSubject = new BehaviorSubject<CategoriesEntity[]>([]);
+  categories$ = this.categoriesSubject.asObservable();
 
   getAllCategories(): Observable<CategoriesEntity[]> {
     return this.http.get<CategoriesEntity[]>(this.resourcePath())
       .pipe(retry(2), catchError(this.handleError));
   }
+
+  loadCategories(): void {
+    this.getAllCategories().subscribe({
+      next: (categories: CategoriesEntity[]) => {
+        this.categoriesSubject.next(categories);
+      },
+      error: (error: any) => {
+        console.error('Error loading categories:', error);
+      }
+    });
+  }
+
 
   getCategoryById(id: number): Observable<CategoriesEntity> {
     return this.http.get<CategoriesEntity>(`${this.resourcePath()}/${id}`)
@@ -24,7 +38,13 @@ export class CategoriesService extends BaseService<CategoriesEntity> {
 
   createCategory(category: CategoriesEntity): Observable<CategoriesEntity> {
     return this.http.post<CategoriesEntity>(this.resourcePath(), category, this.httOptions)
-      .pipe(retry(2), catchError(this.handleError));
+      .pipe(retry(2), catchError(this.handleError))
+      .pipe(
+        tap((newCategory: CategoriesEntity) => {
+          const currentCategories = this.categoriesSubject.value;
+          this.categoriesSubject.next([...currentCategories, newCategory]);
+        })
+      );
   }
 
   updateCategory(id: number, category: CategoriesEntity): Observable<CategoriesEntity> {

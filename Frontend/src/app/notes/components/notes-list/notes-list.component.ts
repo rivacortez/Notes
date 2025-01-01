@@ -4,6 +4,7 @@ import {NotesService} from '../../services/notes.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CategoriesEntity} from '../../model/categories.entity';
+import {CategoriesService} from '../../services/categories.service';
 
 @Component({
   selector: 'app-notes-list',
@@ -14,17 +15,19 @@ import {CategoriesEntity} from '../../model/categories.entity';
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.css'
 })
-export class NotesListComponent implements OnInit {
+export class NotesListComponent  implements OnInit {
   @Input() notes: NotesEntity[] = [];
+  categories: CategoriesEntity[] = [];
   showAddCategoryDialog = false;
   showAddNoteDialog = false;
   newNote: NotesEntity = new NotesEntity();
   newCategory: CategoriesEntity = new CategoriesEntity();
 
-  constructor(private notesService: NotesService) {}
+  constructor(private notesService: NotesService, private categoriesService: CategoriesService) {}
 
   ngOnInit(): void {
     this.loadNotes();
+    this.loadCategories();
   }
 
   loadNotes(): void {
@@ -36,6 +39,22 @@ export class NotesListComponent implements OnInit {
         console.error('Error loading notes:', error);
       }
     });
+  }
+
+  loadCategories(): void {
+    this.categoriesService.categories$.subscribe({
+      next: (categories: CategoriesEntity[]) => {
+        this.categories = categories;
+      },
+      error: (error: any) => {
+        console.error('Error loading categories:', error);
+      }
+    });
+  }
+
+  getCategoryName(categoryId: number): string {
+    const category = this.categories.find(cat => cat.id === categoryId);
+    return category ? category.name : 'Unknown';
   }
 
   openAddNoteDialog(): void {

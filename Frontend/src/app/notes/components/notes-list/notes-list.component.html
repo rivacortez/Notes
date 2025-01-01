@@ -22,7 +22,7 @@
     </div>
     <p class="note-content">{{ note.content }}</p>
     <div class="note-categories">
-      <span class="note-category" *ngFor="let category of note.categories">{{ category.name }}</span>
+      <span class="note-category" *ngFor="let categoryId of note.idCategories">{{ getCategoryName(categoryId) }}</span>
     </div>
   </div>
 </div>

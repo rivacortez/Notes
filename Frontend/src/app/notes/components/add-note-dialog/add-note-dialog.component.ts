@@ -34,16 +34,12 @@ export class AddNoteDialogComponent  implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
-  }
-
-  loadCategories(): void {
-    this.categoriesService.getAllCategories().subscribe({
+    this.categoriesService.categories$.subscribe({
       next: (categories: CategoriesEntity[]) => {
         this.categories = categories;
       },
       error: (error: any) => {
-        console.error('Error loading categories', error);
+        console.error('Error loading categories:', error);
       }
     });
   }
@@ -56,7 +52,6 @@ export class AddNoteDialogComponent  implements OnInit {
   closeModal(): void {
     console.log('Closing Add Note Dialog');
     this.isOpen = false;
-    this.resetForm();
   }
 
   saveNote(): void {
@@ -65,7 +60,7 @@ export class AddNoteDialogComponent  implements OnInit {
         title: this.noteTitle,
         content: this.noteContent,
         archived: false,
-        categories: this.selectedCategories
+        idCategories: this.selectedCategories.map(category => category.id)
       });
 
       this.notesService.create(newNote).subscribe({
@@ -74,24 +69,25 @@ export class AddNoteDialogComponent  implements OnInit {
           this.closeModal();
         },
         error: (error: any) => {
-          console.error('Error creating note', error);
+          console.error('Error creating note:', error);
         }
       });
     }
   }
 
-  toggleDropdown(): void {
-    this.dropdownOpen = !this.dropdownOpen;
+  selectCategory(category: CategoriesEntity): void {
+    const index = this.selectedCategories.findIndex(cat => cat.id === category.id);
+    if (index === -1) {
+      this.selectedCategories.push(category);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
   }
 
-  updateSelectedCategories(): void {
-    this.selectedCategories = this.categories.filter(category => category.selected);
-  }
-
-  private resetForm(): void {
-    this.noteTitle = '';
-    this.noteContent = '';
-    this.selectedCategories = [];
-    this.dropdownOpen = false;
+  onCategoryChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedCategories = Array.from(selectElement.selectedOptions).map(option => {
+      return this.categories.find(category => category.id === +option.value)!;
+    });
   }
 }
