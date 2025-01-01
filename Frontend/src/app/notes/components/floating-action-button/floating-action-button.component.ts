@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {AddNoteDialogComponent} from '../add-note-dialog/add-note-dialog.component';
 import {NgIf} from '@angular/common';
 import {NotesEntity} from '../../model/notes.entity';
@@ -13,19 +13,21 @@ import {NotesEntity} from '../../model/notes.entity';
   styleUrl: './floating-action-button.component.css'
 })
 export class FloatingActionButtonComponent {
-  showAddNoteDialog = false;
   @Output() noteAdded = new EventEmitter<NotesEntity>();
+  @ViewChild(AddNoteDialogComponent) addNoteDialog!: AddNoteDialogComponent;
 
-  onFabClick(): void {
-    this.showAddNoteDialog = true;
+  openNoteModal(): void {
+    console.log('Opening Note Modal from Floating Action Button');
+    this.addNoteDialog.openModal();
   }
 
-  onDialogClose(): void {
-    this.showAddNoteDialog = false;
+  closeNoteModal(): void {
+    console.log('Closing Note Modal from Floating Action Button');
+    this.addNoteDialog.closeModal();
   }
 
-  onNoteAdded(note: NotesEntity): void {
+  handleNoteAdded(note: NotesEntity): void {
     this.noteAdded.emit(note);
-    this.showAddNoteDialog = false;
+    this.closeNoteModal();
   }
 }

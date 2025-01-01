@@ -1,20 +1,16 @@
-<div class="dialog-overlay">
-  <div class="dialog-box">
-    <h2 class="dialog-title">Agregar Categoría</h2>
-
-    <form #categoryForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="categoryName">Nombre de la Categoría:</label>
-        <input type="text" id="categoryName" name="categoryName" [(ngModel)]="categoryName" required class="form-control" placeholder="Ingrese el nombre de la categoría">
-      </div>
-      <div class="form-group">
-        <label for="categoryColor">Color de la Categoría:</label>
-        <input type="text" id="categoryColor" name="categoryColor" [(ngModel)]="categoryColor" required class="form-control" placeholder="Ingrese el color de la categoría">
-      </div>
-      <div class="dialog-actions">
-        <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancelar</button>
-        <button type="submit" [disabled]="!categoryForm.valid" class="btn btn-primary">Agregar</button>
-      </div>
-    </form>
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()"></div>
+<div class="category-modal" *ngIf="isOpen">
+  <div class="modal-header">
+    <h3 class="modal-title">Agregar Nueva Categoría</h3>
+    <button class="modal-close" (click)="closeModal()">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+  </div>
+  <input type="text" class="category-input" placeholder="Nombre de la categoría" [(ngModel)]="categoryName">
+  <div class="modal-buttons">
+    <button class="modal-btn cancel" (click)="closeModal()">Cancelar</button>
+    <button class="modal-btn save" (click)="saveCategory()">Guardar</button>
   </div>
 </div>

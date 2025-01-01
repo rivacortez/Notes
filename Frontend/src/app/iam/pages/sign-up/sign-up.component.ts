@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgIf,
+
     HttpClientModule
   ],
   templateUrl: './sign-up.component.html',

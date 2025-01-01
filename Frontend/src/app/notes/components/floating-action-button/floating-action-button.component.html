@@ -1,7 +1,9 @@
-<div class="fab-container">
-  <button class="fab" (click)="onFabClick()">
-    <span>+</span>
-  </button>
-</div>
-
-<app-add-note-dialog *ngIf="showAddNoteDialog" (close)="onDialogClose()" (noteAdded)="onNoteAdded($event)"></app-add-note-dialog>
+<button class="add-note-btn" (click)="openNoteModal()">
+  <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+  </svg>
+</button>
+<app-add-note-dialog
+  (close)="closeNoteModal()"
+  (noteAdded)="handleNoteAdded($event)">
+</app-add-note-dialog>

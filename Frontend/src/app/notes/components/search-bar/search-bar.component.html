@@ -1,41 +1,17 @@
-<div class="search-bar-wrapper">
-  <div class="search-bar-container">
-    <input
-      type="text"
-      placeholder="Search notes..."
-      class="search-input"
-      [(ngModel)]="searchQuery"
-      (input)="onSearchInput()"
-    />
-    <div class="category-buttons">
-      <button
-        class="category-button"
-        [class.active]="selectedCategory === 'All'"
-        (click)="onCategorySelect('All')"
-      >
-        All
-      </button>
-      <button
-        *ngFor="let category of categories"
-        class="category-button"
-        [class.active]="selectedCategory === category.name"
-        (click)="onCategorySelect(category.name)"
-      >
-        {{ category.name }}
-        <span
-          class="delete-category"
-          (click)="onCategoryDelete(category.name, $event)"
-        >×</span>
-      </button>
-      <button class="add-category-button" (click)="onAddCategoryClick()">
-        + Nueva Categoría
-      </button>
-    </div>
+<div class="search-bar-container">
+  <input type="text" class="search-bar" placeholder="Buscar notas..." (input)="onSearch($event)">
+  <div class="categories">
+    <button class="category-btn active" (click)="selectCategory(null)">Todas</button>
+    <button class="category-btn" *ngFor="let category of categories" (click)="selectCategory(category)">{{ category.name }}</button>
+    <button class="add-category-btn" (click)="openCategoryModal()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+      </svg>
+      Nueva Categoría
+    </button>
   </div>
+  <app-add-category-dialog
+    (close)="onDialogClose()"
+    (categoryAdded)="onCategoryAdded($event)">
+  </app-add-category-dialog>
 </div>
-
-<app-add-category-dialog
-  *ngIf="showAddCategoryDialog"
-  (close)="onDialogClose()"
-  (categoryAdded)="onCategoryAdded($event)"
-></app-add-category-dialog>

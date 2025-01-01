@@ -1,18 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {NotesEntity} from '../../model/notes.entity';
 import {NotesService} from '../../services/notes.service';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {CategoriesEntity} from '../../model/categories.entity';
 
 @Component({
   selector: 'app-notes-list',
   imports: [
-    NgForOf
+    NgForOf,
+    FormsModule
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.css'
 })
 export class NotesListComponent implements OnInit {
   notes: NotesEntity[] = [];
+  showAddCategoryDialog = false;
+  showAddNoteDialog = false;
+  newNote: NotesEntity = new NotesEntity();
+  newCategory: CategoriesEntity = new CategoriesEntity();
 
   constructor(private notesService: NotesService) {}
 
@@ -29,5 +36,49 @@ export class NotesListComponent implements OnInit {
         console.error('Error loading notes', error);
       }
     });
+  }
+
+  openAddNoteDialog(): void {
+    this.showAddNoteDialog = true;
+  }
+
+  closeAddNoteDialog(): void {
+    this.showAddNoteDialog = false;
+  }
+
+  saveNote(): void {
+    this.notesService.create(this.newNote).subscribe({
+      next: (createdNote: NotesEntity) => {
+        this.notes.push(createdNote);
+        this.closeAddNoteDialog();
+      },
+      error: (error: any) => {
+        console.error('Error creating note', error);
+      }
+    });
+  }
+
+  openAddCategoryDialog(): void {
+    this.showAddCategoryDialog = true;
+  }
+
+  closeAddCategoryDialog(): void {
+    this.showAddCategoryDialog = false;
+  }
+
+  saveCategory(): void {
+    // Implement save category
+  }
+
+  editNote(note: NotesEntity): void {
+    // Implement edit
+  }
+
+  deleteNote(note: NotesEntity): void {
+    // Implement delete
+  }
+
+  archiveNote(note: NotesEntity): void {
+    // Implement archive
   }
 }

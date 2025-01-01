@@ -1,36 +1,50 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CategoriesEntity} from '../../model/categories.entity';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-add-category-dialog',
   imports: [
-    FormsModule
+    FormsModule,
+    NgIf
   ],
   templateUrl: './add-category-dialog.component.html',
   styleUrl: './add-category-dialog.component.css'
 })
-export class AddCategoryDialogComponent {
+export class AddCategoryDialogComponent  {
   @Output() close = new EventEmitter<void>();
   @Output() categoryAdded = new EventEmitter<CategoriesEntity>();
 
   categoryName: string = '';
   categoryColor: string = '';
+  isOpen: boolean = false;
 
-  onCancel(): void {
-    console.log('Cancel button clicked');
-    this.close.emit();
+  openModal(): void {
+    console.log('Opening Add Category Dialog');
+    this.isOpen = true;
   }
 
-  onSubmit(): void {
-    console.log('Submit button clicked');
-    console.log('Category Name:', this.categoryName);
-    console.log('Category Color:', this.categoryColor);
+  closeModal(): void {
+    console.log('Closing Add Category Dialog');
+    this.isOpen = false;
+    this.resetForm();
+  }
 
-    const newCategory = new CategoriesEntity({ name: this.categoryName, color: this.categoryColor });
-    console.log('New Category:', newCategory);
+  onCancel(): void {
+    this.closeModal();
+  }
 
-    this.categoryAdded.emit(newCategory);
-    this.close.emit();
+  saveCategory(): void {
+    if (this.categoryName.trim()) {
+      const newCategory = new CategoriesEntity({ name: this.categoryName, color: this.categoryColor });
+      this.categoryAdded.emit(newCategory);
+      this.closeModal();
+    }
+  }
+
+  private resetForm(): void {
+    this.categoryName = '';
+    this.categoryColor = '';
   }
 }

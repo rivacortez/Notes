@@ -1,22 +1,24 @@
-<div class="dialog-overlay">
-  <div class="dialog-box">
-    <h2 class="dialog-title">Add Note</h2>
-
-    <form #noteForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="noteTitle">Title:</label>
-        <input type="text" id="noteTitle" name="noteTitle" [(ngModel)]="noteTitle" required class="form-control" placeholder="Enter note title">
-      </div>
-
-      <div class="form-group">
-        <label for="noteContent">Note Content:</label>
-        <textarea id="noteContent" name="noteContent" [(ngModel)]="noteContent" required class="form-control" placeholder="Enter note content"></textarea>
-      </div>
-
-      <div class="dialog-actions">
-        <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancel</button>
-        <button type="submit" [disabled]="!noteForm.valid" class="btn btn-primary">Save</button>
-      </div>
-    </form>
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()"></div>
+<div class="note-modal" [ngClass]="{'active': isOpen}">
+  <div class="modal-header">
+    <h3 class="modal-title">Agregar Nueva Nota</h3>
+    <button class="modal-close" id="closeNoteModal" (click)="closeModal()">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
   </div>
+  <form class="note-form" (ngSubmit)="saveNote()">
+    <input type="text" class="note-input" id="noteTitleInput" placeholder="Título de la nota" [(ngModel)]="noteTitle" name="title" required>
+    <textarea class="note-input" id="noteContentInput" placeholder="Contenido de la nota" [(ngModel)]="noteContent" name="content" rows="4" required></textarea>
+    <div class="note-categories-input">
+      <select class="category-input" id="noteCategorySelect" multiple>
+        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+    <div class="modal-buttons">
+      <button type="button" class="modal-btn cancel" id="cancelNoteBtn" (click)="closeModal()">Cancelar</button>
+      <button type="submit" class="modal-btn save">Guardar</button>
+    </div>
+  </form>
 </div>
