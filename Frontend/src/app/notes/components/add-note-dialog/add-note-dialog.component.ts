@@ -17,7 +17,7 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
   templateUrl: './add-note-dialog.component.html',
   styleUrl: './add-note-dialog.component.css'
 })
-export class AddNoteDialogComponent  implements OnInit {
+export class AddNoteDialogComponent   implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() noteAdded = new EventEmitter<NotesEntity>();
 
@@ -52,6 +52,7 @@ export class AddNoteDialogComponent  implements OnInit {
   closeModal(): void {
     console.log('Closing Add Note Dialog');
     this.isOpen = false;
+    this.resetForm();
   }
 
   saveNote(): void {
@@ -66,6 +67,7 @@ export class AddNoteDialogComponent  implements OnInit {
       this.notesService.create(newNote).subscribe({
         next: (createdNote: NotesEntity) => {
           this.noteAdded.emit(createdNote);
+          this.resetForm();
           this.closeModal();
         },
         error: (error: any) => {
@@ -89,5 +91,11 @@ export class AddNoteDialogComponent  implements OnInit {
     this.selectedCategories = Array.from(selectElement.selectedOptions).map(option => {
       return this.categories.find(category => category.id === +option.value)!;
     });
+  }
+
+  private resetForm(): void {
+    this.noteTitle = '';
+    this.noteContent = '';
+    this.selectedCategories = [];
   }
 }
