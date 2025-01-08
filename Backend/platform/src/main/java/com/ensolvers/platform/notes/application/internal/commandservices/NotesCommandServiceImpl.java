@@ -9,9 +9,9 @@ import com.ensolvers.platform.notes.domain.model.commands.NotesCommand;
 import com.ensolvers.platform.notes.domain.model.commands.PatchNotesCommand;
 import com.ensolvers.platform.notes.domain.services.NotesCommandService;
 import com.ensolvers.platform.notes.infrastructure.persistence.jpa.repositories.NotesRepository;
-import com.ensolvers.platform.notes.interfaces.rest.resources.UpdateNotesResource;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -70,8 +70,8 @@ public class NotesCommandServiceImpl implements NotesCommandService {
 
     @Override
     public void associateWithCategory(Long noteId, Long categoryId) {
-        Notes note = notesRepository.findById(noteId).orElseThrow();
-        Categories category = categoriesRepository.findById(categoryId).orElseThrow();
+        Notes note = notesRepository.findById(noteId).orElseThrow(() -> new NoSuchElementException("Note not found with id: " + noteId));
+        Categories category = categoriesRepository.findById(categoryId).orElseThrow(() -> new NoSuchElementException("Category not found with id: " + categoryId));
         NoteCategory noteCategory = new NoteCategory(new NoteCategoryId(noteId, categoryId), note, category);
         note.getNoteCategories().add(noteCategory);
         notesRepository.save(note);

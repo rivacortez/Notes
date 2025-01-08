@@ -41,6 +41,17 @@ public class NotesController {
         this.notesQueryService = notesQueryService;
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a note", description = "Delete a note")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Note deleted"),
+            @ApiResponse(responseCode = "404", description = "Note not found")})
+    public ResponseEntity<MessageResource> deleteNote(@PathVariable Long id) {
+        notesCommandService.delete(id);
+        return ResponseEntity.ok(new MessageResource("Note deleted successfully"));
+    }
+
+
     @PostMapping
     @Operation(summary = "Create a new note", description = "Create a new note")
     @ApiResponses(value = {

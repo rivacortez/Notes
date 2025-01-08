@@ -12,7 +12,8 @@ import { EditNoteDialogComponent } from '../edit-note-dialog/edit-note-dialog.co
   imports: [
     NgForOf,
     FormsModule,
-    EditNoteDialogComponent
+    EditNoteDialogComponent,
+    NgIf
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.css'
@@ -84,6 +85,7 @@ export class NotesListComponent  implements OnInit {
     note.archived = true;
     this.notesService.updateNote(note.id, note).subscribe({
       next: () => {
+        note.archived = true
         this.loadNotes();
       },
       error: (error: any) => {
