@@ -1,23 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NotesEntity} from '../../model/notes.entity';
 import {NotesService} from '../../services/notes.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CategoriesEntity} from '../../model/categories.entity';
 import {CategoriesService} from '../../services/categories.service';
+import { EditNoteDialogComponent } from '../edit-note-dialog/edit-note-dialog.component';
 
 @Component({
   selector: 'app-notes-list',
   imports: [
     NgForOf,
-    FormsModule
+    FormsModule,
+    EditNoteDialogComponent
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.css'
 })
 export class NotesListComponent  implements OnInit {
+  @ViewChild(EditNoteDialogComponent) editNoteDialog!: EditNoteDialogComponent;
+
   @Input() notes: NotesEntity[] = [];
   categories: CategoriesEntity[] = [];
+
   showAddCategoryDialog = false;
   showAddNoteDialog = false;
   newNote: NotesEntity = new NotesEntity();
@@ -57,40 +62,11 @@ export class NotesListComponent  implements OnInit {
     return category ? category.name : 'Unknown';
   }
 
-  openAddNoteDialog(): void {
-    this.showAddNoteDialog = true;
-  }
 
-  closeAddNoteDialog(): void {
-    this.showAddNoteDialog = false;
-  }
 
-  saveNote(): void {
-    this.notesService.create(this.newNote).subscribe({
-      next: (createdNote: NotesEntity) => {
-        this.notes.push(createdNote);
-        this.closeAddNoteDialog();
-      },
-      error: (error: any) => {
-        console.error('Error creating note:', error);
-      }
-    });
-  }
-
-  openAddCategoryDialog(): void {
-    this.showAddCategoryDialog = true;
-  }
-
-  closeAddCategoryDialog(): void {
-    this.showAddCategoryDialog = false;
-  }
-
-  saveCategory(): void {
-    // Implement save category
-  }
 
   editNote(note: NotesEntity): void {
-    // Implement edit
+    this.editNoteDialog.openModal(note);
   }
 
   deleteNote(note: NotesEntity): void {
@@ -115,4 +91,17 @@ export class NotesListComponent  implements OnInit {
       }
     });
   }
+
+
+
+
+
+
+  onNoteUpdated(updatedNote: NotesEntity): void {
+    const index = this.notes.findIndex(note => note.id === updatedNote.id);
+    if (index !== -1) {
+      this.notes[index] = updatedNote;
+    }
+  }
+
 }
