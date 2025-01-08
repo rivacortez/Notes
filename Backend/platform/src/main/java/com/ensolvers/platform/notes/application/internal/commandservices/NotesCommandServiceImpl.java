@@ -87,4 +87,11 @@ public class NotesCommandServiceImpl implements NotesCommandService {
         note.getNoteCategories().remove(noteCategory);
         notesRepository.save(note);
     }
+
+    @Override
+    public void disassociateAllCategories(Long noteId) {
+        Notes note = notesRepository.findById(noteId).orElseThrow();
+        note.getNoteCategories().clear();
+        notesRepository.save(note);
+    }
 }

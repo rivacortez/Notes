@@ -14,4 +14,6 @@ public interface NotesCommandService {
     void delete(Long id);
     void associateWithCategory(Long noteId, Long categoryId);
     void disassociateFromCategory(Long noteId, Long categoryId);
+
+    void disassociateAllCategories(Long noteId);
 }

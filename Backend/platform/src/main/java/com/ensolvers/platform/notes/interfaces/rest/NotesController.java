@@ -69,18 +69,16 @@ public class NotesController {
     public ResponseEntity<NotesResource> updateNote(@PathVariable Long id, @RequestBody UpdateNotesResource resource) {
         NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived());
         Notes note = notesCommandService.update(id, command);
+
+        if (resource.idCategories() != null) {
+            notesCommandService.disassociateAllCategories(id);
+            for (Long categoryId : resource.idCategories()) {
+                notesCommandService.associateWithCategory(note.getId(), categoryId);
+            }
+        }
+
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
         return ResponseEntity.ok(notesResource);
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a note", description = "Delete a note")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Note deleted"),
-            @ApiResponse(responseCode = "404", description = "Note not found")})
-    public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
-        notesCommandService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 
 
