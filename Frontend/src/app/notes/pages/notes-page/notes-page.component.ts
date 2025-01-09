@@ -16,6 +16,15 @@ import {NotesEntity} from '../../model/notes.entity';
 })
 export class NotesPageComponent {
   @ViewChild(NotesListComponent) notesListComponent!: NotesListComponent;
+  @ViewChild(SearchBarComponent) searchBarComponent!: SearchBarComponent;
+
+
+  ngAfterViewInit(): void {
+    this.notesListComponent.notesUpdated.subscribe(() => {
+      this.searchBarComponent.filterNotes();
+    });
+  }
+
 
   onNoteAdded(note: NotesEntity): void {
     this.notesListComponent.notes.push(note);

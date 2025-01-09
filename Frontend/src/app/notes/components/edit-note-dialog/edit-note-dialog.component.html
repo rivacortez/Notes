@@ -9,8 +9,8 @@
     </button>
   </div>
   <form class="note-form" (ngSubmit)="saveNote()">
-    <input type="text" class="note-input" placeholder="Título de la nota" [(ngModel)]="note.title" name="title" required>
-    <textarea class="note-input" placeholder="Contenido de la nota" [(ngModel)]="note.content" name="content" rows="4" required></textarea>
+    <input type="text" class="note-input" placeholder="Note Title" [(ngModel)]="note.title" name="title" required>
+    <textarea class="note-input" placeholder="Note Content" [(ngModel)]="note.content" name="content" rows="4" required></textarea>
     <div class="note-categories-input">
       <select class="category-input" multiple [(ngModel)]="note.idCategories" name="idCategories">
         <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>

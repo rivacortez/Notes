@@ -33,7 +33,7 @@ export class SearchBarComponent implements OnInit {
     private notesService: NotesService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.categoriesService.categories$.subscribe({
       next: (categories: CategoriesEntity[]) => {
         this.categories = categories;
@@ -43,6 +43,11 @@ export class SearchBarComponent implements OnInit {
       }
     });
     this.categoriesService.loadCategories();
+    this.filterNotes();
+  }
+
+  updateArchiveButtonText(): void {
+    this.archiveButtonText = this.archiveButtonText === 'Archived' ? 'Unarchived' : 'Archived';
   }
 
   onSearch(event: Event): void {
@@ -51,11 +56,11 @@ export class SearchBarComponent implements OnInit {
     this.filterNotes();
   }
 
+
   selectCategory(category: CategoriesEntity | null): void {
     this.selectedCategory = category;
     this.filterNotes();
   }
-
 
   filterNotes(): void {
     this.notesService.getAll().subscribe({
@@ -66,6 +71,11 @@ export class SearchBarComponent implements OnInit {
         }
         if (this.searchQuery) {
           filteredNotes = filteredNotes.filter(note => note.title.toLowerCase().includes(this.searchQuery) || note.content.toLowerCase().includes(this.searchQuery));
+        }
+        if (this.archiveButtonText === 'Archived') {
+          filteredNotes = filteredNotes.filter(note => !note.archived);
+        } else {
+          filteredNotes = filteredNotes.filter(note => note.archived);
         }
         this.notesFiltered.emit(filteredNotes);
       },
@@ -103,29 +113,8 @@ export class SearchBarComponent implements OnInit {
   }
 
   toggleArchive(): void {
-    if (this.archiveButtonText === 'Archived') {
-      this.archiveButtonText = 'Unarchived';
-      this.notesService.getAll().subscribe({
-        next: (notes: NotesEntity[]) => {
-          const filteredNotes = notes.filter(note => note.archived);
-          this.notesFiltered.emit(filteredNotes);
-        },
-        error: (error: any) => {
-          console.error('Error loading notes:', error);
-        }
-      });
-    } else {
-      this.archiveButtonText = 'Archived';
-      this.notesService.getAll().subscribe({
-        next: (notes: NotesEntity[]) => {
-          const filteredNotes = notes.filter(note => !note.archived);
-          this.notesFiltered.emit(filteredNotes);
-        },
-        error: (error: any) => {
-          console.error('Error loading notes:', error);
-        }
-      });
-    }
+    this.archiveButtonText = this.archiveButtonText === 'Archived' ? 'Unarchived' : 'Archived';
+    this.filterNotes();
   }
 
   onDialogClose(): void {
@@ -135,5 +124,4 @@ export class SearchBarComponent implements OnInit {
   onCategoryAdded(event: CategoriesEntity): void {
     this.handleCategoryAdded(event);
   }
-
 }

@@ -13,7 +13,13 @@
       New Category
     </button>
   </div>
-  <button class="archive-btn" (click)="toggleArchive()">{{ archiveButtonText }}</button>
+  <div class="archive-switch">
+    <span>Archived</span>
+    <label class="switch">
+      <input type="checkbox" (change)="toggleArchive()" [checked]="archiveButtonText === 'Unarchived'">
+      <span class="slider"></span>
+    </label>
+  </div>
   <app-add-category-dialog
     (close)="onDialogClose()"
     (categoryAdded)="onCategoryAdded($event)">

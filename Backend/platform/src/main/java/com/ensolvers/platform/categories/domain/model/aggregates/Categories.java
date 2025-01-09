@@ -20,7 +20,7 @@ public class Categories extends AuditableModel {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<NoteCategory> noteCategories;
 
-    // Getter and Setter methods
+
     public Long getId() {
         return id;
     }

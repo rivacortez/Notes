@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NotesEntity} from '../../model/notes.entity';
 import {NotesService} from '../../services/notes.service';
 import {NgForOf, NgIf} from '@angular/common';
@@ -6,6 +6,7 @@ import {FormsModule} from '@angular/forms';
 import {CategoriesEntity} from '../../model/categories.entity';
 import {CategoriesService} from '../../services/categories.service';
 import { EditNoteDialogComponent } from '../edit-note-dialog/edit-note-dialog.component';
+import {SearchBarComponent} from '../search-bar/search-bar.component';
 
 @Component({
   selector: 'app-notes-list',
@@ -20,9 +21,10 @@ import { EditNoteDialogComponent } from '../edit-note-dialog/edit-note-dialog.co
 })
 export class NotesListComponent  implements OnInit {
   @ViewChild(EditNoteDialogComponent) editNoteDialog!: EditNoteDialogComponent;
-
+  @Input() searchBarComponent!: SearchBarComponent;
   @Input() notes: NotesEntity[] = [];
   categories: CategoriesEntity[] = [];
+  @Output() notesUpdated = new EventEmitter<void>();
 
   showAddCategoryDialog = false;
   showAddNoteDialog = false;
@@ -39,7 +41,7 @@ export class NotesListComponent  implements OnInit {
   loadNotes(): void {
     this.notesService.getAll().subscribe({
       next: (notes: NotesEntity[]) => {
-        this.notes = notes.filter(note => !note.archived);
+        this.notes = notes;
       },
       error: (error: any) => {
         console.error('Error loading notes:', error);
@@ -63,9 +65,6 @@ export class NotesListComponent  implements OnInit {
     return category ? category.name : 'Unknown';
   }
 
-
-
-
   editNote(note: NotesEntity): void {
     this.editNoteDialog.openModal(note);
   }
@@ -82,11 +81,10 @@ export class NotesListComponent  implements OnInit {
   }
 
   archiveNote(note: NotesEntity): void {
-    note.archived = true;
-    this.notesService.updateNote(note.id, note).subscribe({
+    note.archived = !note.archived;
+    this.notesService.update(note.id, note).subscribe({
       next: () => {
-        note.archived = true
-        this.loadNotes();
+        this.notesUpdated.emit();
       },
       error: (error: any) => {
         console.error('Error archiving note:', error);
@@ -94,16 +92,10 @@ export class NotesListComponent  implements OnInit {
     });
   }
 
-
-
-
-
-
   onNoteUpdated(updatedNote: NotesEntity): void {
     const index = this.notes.findIndex(note => note.id === updatedNote.id);
     if (index !== -1) {
       this.notes[index] = updatedNote;
     }
   }
-
 }

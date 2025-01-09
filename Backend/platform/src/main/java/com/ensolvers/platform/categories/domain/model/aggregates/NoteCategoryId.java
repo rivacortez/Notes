@@ -9,7 +9,6 @@ public class NoteCategoryId implements Serializable {
     private Long noteId;
     private Long categoryId;
 
-    // Default constructor, getters, setters, equals, and hashCode methods
     public NoteCategoryId() {}
 
     public NoteCategoryId(Long noteId, Long categoryId) {
@@ -17,7 +16,6 @@ public class NoteCategoryId implements Serializable {
         this.categoryId = categoryId;
     }
 
-    // Getters and setters
 
     @Override
     public boolean equals(Object o) {
