@@ -14,7 +14,7 @@ input {
 .container {
   position: relative;
   width: 100%;
-  background-color: #fff;
+  background-color: #F5F7FA;
   min-height: 100vh;
   overflow: hidden;
 }
@@ -134,7 +134,7 @@ form.sign-in-form {
 
 .btn {
   width: 150px;
-  background-color: #00da58;
+  background-color: #4481eb;
   border: none;
   outline: none;
   height: 49px;
@@ -148,7 +148,7 @@ form.sign-in-form {
 }
 
 .btn:hover {
-  background-color: #00da58;
+  background-color: #4ec4e8;
 }
 
 .panels-container {
@@ -169,7 +169,7 @@ form.sign-in-form {
   top: -10%;
   right: 48%;
   transform: translateY(-50%);
-  background-image: linear-gradient(-45deg, rgba(53, 212, 0, 0.829), #00da58);
+  background-image: linear-gradient(-45deg, rgb(68, 129, 235), #4ec4e8);
   transition: 1.8s ease-in-out;
   border-radius: 50%;
   z-index: 6;
