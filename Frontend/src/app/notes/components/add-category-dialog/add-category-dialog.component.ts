@@ -40,7 +40,8 @@ export class AddCategoryDialogComponent {
 
   saveCategory(): void {
     if (this.categoryName.trim()) {
-      const newCategory = new CategoriesEntity({ name: this.categoryName, color: this.categoryColor });
+      const newCategory = new CategoriesEntity({ name: this.categoryName });
+
       this.categoriesService.createCategory(newCategory).subscribe({
         next: (createdCategory: CategoriesEntity) => {
           this.categoryAdded.emit(createdCategory);

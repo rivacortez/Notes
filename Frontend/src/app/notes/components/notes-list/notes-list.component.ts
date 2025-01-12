@@ -19,7 +19,7 @@ import {SearchBarComponent} from '../search-bar/search-bar.component';
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.css'
 })
-export class NotesListComponent  implements OnInit {
+export class NotesListComponent implements OnInit {
   @ViewChild(EditNoteDialogComponent) editNoteDialog!: EditNoteDialogComponent;
   @Input() searchBarComponent!: SearchBarComponent;
   @Input() notes: NotesEntity[] = [];
@@ -101,5 +101,13 @@ export class NotesListComponent  implements OnInit {
 
   onCategoryAdded(newCategory: CategoriesEntity): void {
     this.categories.push(newCategory);
+    this.notesUpdated.emit();
+  }
+
+  ngAfterViewInit(): void {
+    this.editNoteDialog.reloadNotesAndCategories.subscribe(() => {
+      this.loadNotes();
+      this.loadCategories();
+    });
   }
 }

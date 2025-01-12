@@ -15,23 +15,24 @@ import {CategoriesEntity} from '../../model/categories.entity';
   templateUrl: './notes-page.component.html',
   styleUrl: './notes-page.component.css'
 })
-export class NotesPageComponent {
+export class NotesPageComponent  {
   @ViewChild(NotesListComponent) notesListComponent!: NotesListComponent;
   @ViewChild(SearchBarComponent) searchBarComponent!: SearchBarComponent;
-
 
   ngAfterViewInit(): void {
     this.notesListComponent.notesUpdated.subscribe(() => {
       this.searchBarComponent.filterNotes();
+
     });
     this.searchBarComponent.categoryAddedEvent.subscribe((newCategory: CategoriesEntity) => {
       this.notesListComponent.onCategoryAdded(newCategory);
     });
   }
 
-
   onNoteAdded(note: NotesEntity): void {
     this.notesListComponent.notes.push(note);
+    this.notesListComponent.loadCategories();
+    this.notesListComponent.loadNotes();
   }
 
   onNotesFiltered(filteredNotes: NotesEntity[]): void {

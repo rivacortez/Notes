@@ -77,6 +77,10 @@ public class NotesController {
         Long userId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived(), resource.idCategories());
         Notes note = notesCommandService.update(id, command, userId);
+        notesCommandService.disassociateAllCategories(id);
+        for (Long categoryId : resource.idCategories()) {
+            notesCommandService.associateWithCategory(id, categoryId);
+        }
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
         return ResponseEntity.ok(notesResource);
     }

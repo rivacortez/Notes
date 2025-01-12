@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { NotesEntity } from '../../model/notes.entity';
 import { CategoriesEntity } from '../../model/categories.entity';
 import { NotesService } from '../../services/notes.service';
 import { CategoriesService } from '../../services/categories.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {NotesListComponent} from '../notes-list/notes-list.component';
 
 @Component({
   selector: 'app-edit-note-dialog',
@@ -21,7 +22,7 @@ export class EditNoteDialogComponent implements OnInit {
   @Input() note: NotesEntity = new NotesEntity();
   @Output() close = new EventEmitter<void>();
   @Output() noteUpdated = new EventEmitter<NotesEntity>();
-
+  @Output() reloadNotesAndCategories = new EventEmitter<void>();
   categories: CategoriesEntity[] = [];
   isOpen: boolean = false;
 
@@ -55,6 +56,7 @@ export class EditNoteDialogComponent implements OnInit {
       next: (updatedNote: NotesEntity) => {
         this.noteUpdated.emit(updatedNote);
         this.closeModal();
+        this.reloadNotesAndCategories.emit();
       },
       error: (error: any) => {
         console.error('Error updating note:', error);

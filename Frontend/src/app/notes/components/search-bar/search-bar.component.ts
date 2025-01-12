@@ -49,7 +49,6 @@ export class SearchBarComponent implements OnInit {
       }
     });
     this.categoriesService.loadCategories();
-    this.filterNotes();
   }
 
   updateArchiveButtonText(): void {
@@ -103,6 +102,7 @@ export class SearchBarComponent implements OnInit {
   handleCategoryAdded(newCategory: CategoriesEntity): void {
     if (!this.categories.some(category => category.id === newCategory.id)) {
       this.categories.push(newCategory);
+      this.categoryAddedEvent.emit(newCategory);
     }
   }
 
@@ -129,6 +129,7 @@ export class SearchBarComponent implements OnInit {
   onCategoryAdded(newCategory: CategoriesEntity): void {
     if (!this.categories.some(category => category.id === newCategory.id)) {
       this.categories.push(newCategory);
+      this.categoryAddedEvent.emit(newCategory);
     }
   }
 }

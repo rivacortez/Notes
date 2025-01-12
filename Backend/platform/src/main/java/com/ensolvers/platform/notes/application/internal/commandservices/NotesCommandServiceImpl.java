@@ -53,10 +53,20 @@ public class NotesCommandServiceImpl implements NotesCommandService {
     @Transactional
     public Notes update(Long id, NotesCommand command, Long userId) {
         Notes note = notesRepository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new RuntimeException("Note not found or user not authorized"));
+                .orElseThrow(() -> new RuntimeException("Note not found or user not authorized for userId: " + userId + " and noteId: " + id));
         note.setTitle(command.title());
         note.setContent(command.content());
         note.setArchived(command.archived());
+
+        note.getNoteCategories().clear();
+
+        for (Long categoryId : command.idCategories()) {
+            Categories category = categoriesRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
+            NoteCategory noteCategory = new NoteCategory(new NoteCategoryId(note.getId(), categoryId), note, category);
+            note.getNoteCategories().add(noteCategory);
+        }
+
         return notesRepository.save(note);
     }
 

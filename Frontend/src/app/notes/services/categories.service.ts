@@ -36,8 +36,9 @@ export class CategoriesService extends BaseService<CategoriesEntity> {
 
   createCategory(category: CategoriesEntity): Observable<CategoriesEntity> {
     return this.http.post<CategoriesEntity>(this.resourcePath(), category, this.httOptions)
-      .pipe(retry(2), catchError(this.handleError))
       .pipe(
+        retry(2),
+        catchError(this.handleError),
         tap((newCategory: CategoriesEntity) => {
           const currentCategories = this.categoriesSubject.value;
           this.categoriesSubject.next([...currentCategories, newCategory]);
