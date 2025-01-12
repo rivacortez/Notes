@@ -109,12 +109,13 @@ public class CategoriesController {
      * @return The list of {@link CategoriesResource} resources for all categories
      */
     @GetMapping
-    @Operation(summary = "Get all categories", description = "Get all categories")
+    @Operation(summary = "Get all categories for the authenticated user", description = "Get all categories for the authenticated user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categories found"),
-            @ApiResponse(responseCode = "404", description = "Categories not found")})
-    public ResponseEntity<List<CategoriesResource>> getAllCategories() {
-        List<Categories> categories = categoriesQueryService.findAll();
+            @ApiResponse(responseCode = "401", description = "Unauthorized")})
+    public ResponseEntity<List<CategoriesResource>> getAllCategoriesForUser(Authentication authentication) {
+        Long userId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        List<Categories> categories = categoriesQueryService.findAllByUserId(userId);
         List<CategoriesResource> categoriesResources = categories.stream()
                 .map(CategoriesResourceFromEntityAssembler::toResourceFromEntity)
                 .toList();

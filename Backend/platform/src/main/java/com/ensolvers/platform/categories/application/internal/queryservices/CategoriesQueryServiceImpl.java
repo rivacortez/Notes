@@ -22,6 +22,10 @@ public class CategoriesQueryServiceImpl implements CategoriesQueryService {
         return categoriesRepository.findAll();
     }
 
+    @Override
+    public List<Categories> findAllByUserId(Long userId) {
+        return categoriesRepository.findAllByUserId(userId);
+    }
 
     @Override
     public List<Notes> getNotesOfCategory(Long categoryId) {

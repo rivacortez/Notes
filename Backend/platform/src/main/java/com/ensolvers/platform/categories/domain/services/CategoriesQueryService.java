@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CategoriesQueryService {
     List<Categories> findAll();
+    List<Categories> findAllByUserId(Long userId);
     List<Notes> getNotesOfCategory(Long categoryId);
 }

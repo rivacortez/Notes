@@ -98,4 +98,8 @@ export class NotesListComponent  implements OnInit {
       this.notes[index] = updatedNote;
     }
   }
+
+  onCategoryAdded(newCategory: CategoriesEntity): void {
+    this.categories.push(newCategory);
+  }
 }

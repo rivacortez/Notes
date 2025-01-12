@@ -5,6 +5,6 @@ import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
 
 public class CreateNotesCommandFromResourceAssembler {
     public static NotesCommand toCommandFromResource(NotesResource resource) {
-        return new NotesCommand(resource.title(), resource.content(), resource.archived());
+        return new NotesCommand(resource.title(), resource.content(), resource.archived(),resource.idCategories());
     }
 }

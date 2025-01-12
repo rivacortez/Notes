@@ -18,9 +18,15 @@ import {NotesEntity} from '../../model/notes.entity';
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css']
 })
+
+
+
 export class SearchBarComponent implements OnInit {
   @ViewChild(AddCategoryDialogComponent) addCategoryDialog!: AddCategoryDialogComponent;
   @Output() notesFiltered = new EventEmitter<NotesEntity[]>();
+  @Output() categoryAdded = new EventEmitter<CategoriesEntity>();
+  @Output() categoryAddedEvent = new EventEmitter<CategoriesEntity>();
+
 
   categories: CategoriesEntity[] = [];
   selectedCategory: CategoriesEntity | null = null;
@@ -120,7 +126,9 @@ export class SearchBarComponent implements OnInit {
     this.closeCategoryModal();
   }
 
-  onCategoryAdded(event: CategoriesEntity): void {
-    this.handleCategoryAdded(event);
+  onCategoryAdded(newCategory: CategoriesEntity): void {
+    if (!this.categories.some(category => category.id === newCategory.id)) {
+      this.categories.push(newCategory);
+    }
   }
 }

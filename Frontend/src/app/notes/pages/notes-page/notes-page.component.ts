@@ -3,6 +3,7 @@ import {SearchBarComponent} from '../../components/search-bar/search-bar.compone
 import {NotesListComponent} from '../../components/notes-list/notes-list.component';
 import {FloatingActionButtonComponent} from '../../components/floating-action-button/floating-action-button.component';
 import {NotesEntity} from '../../model/notes.entity';
+import {CategoriesEntity} from '../../model/categories.entity';
 
 @Component({
   selector: 'app-notes-page',
@@ -22,6 +23,9 @@ export class NotesPageComponent {
   ngAfterViewInit(): void {
     this.notesListComponent.notesUpdated.subscribe(() => {
       this.searchBarComponent.filterNotes();
+    });
+    this.searchBarComponent.categoryAddedEvent.subscribe((newCategory: CategoriesEntity) => {
+      this.notesListComponent.onCategoryAdded(newCategory);
     });
   }
 

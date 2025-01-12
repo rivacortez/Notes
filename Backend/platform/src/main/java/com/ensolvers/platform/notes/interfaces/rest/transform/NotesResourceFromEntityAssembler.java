@@ -14,7 +14,7 @@ public class NotesResourceFromEntityAssembler {
                 entity.getArchived(),
                 entity.getNoteCategories().stream()
                         .map(noteCategory -> noteCategory.getCategory().getId())
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 }

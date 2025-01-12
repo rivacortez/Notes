@@ -52,14 +52,20 @@ public class NotesController {
     @PostMapping
     @Operation(summary = "Create a new note", description = "Create a new note")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Note created"),
-            @ApiResponse(responseCode = "400", description = "Invalid input")})
+            @ApiResponse(responseCode = "201", description = "Note created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     public ResponseEntity<NotesResource> createNote(@RequestBody CreateNotesResource resource, Authentication authentication) {
         Long userId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived());
+        NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived(), resource.idCategories());
         Notes note = notesCommandService.create(command, userId);
+
+        for (Long categoryId : resource.idCategories()) {
+            notesCommandService.associateWithCategory(note.getId(), categoryId);
+        }
+
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
-        return ResponseEntity.status(HttpStatus.CREATED).body(notesResource);
+        return new ResponseEntity<>(notesResource, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -69,7 +75,7 @@ public class NotesController {
             @ApiResponse(responseCode = "404", description = "Note not found")})
     public ResponseEntity<NotesResource> updateNote(@PathVariable Long id, @RequestBody UpdateNotesResource resource, Authentication authentication) {
         Long userId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived());
+        NotesCommand command = new NotesCommand(resource.title(), resource.content(), resource.archived(), resource.idCategories());
         Notes note = notesCommandService.update(id, command, userId);
         NotesResource notesResource = NotesResourceFromEntityAssembler.toResourceFromEntity(note);
         return ResponseEntity.ok(notesResource);
