@@ -1,6 +1,5 @@
 package com.ensolvers.platform.notes.domain.model.aggregates;
 
-
 import com.ensolvers.platform.categories.domain.model.aggregates.NoteCategory;
 import com.ensolvers.platform.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.*;
@@ -23,9 +22,11 @@ public class Notes extends AuditableModel {
     @Column(nullable = false)
     private Boolean archived = false;
 
+    @Column(nullable = false)
+    private Long userId;
+
     @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<NoteCategory> noteCategories = new HashSet<>();
-
 
     public Long getId() {
         return id;
@@ -57,6 +58,14 @@ public class Notes extends AuditableModel {
 
     public void setArchived(Boolean archived) {
         this.archived = archived;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Set<NoteCategory> getNoteCategories() {

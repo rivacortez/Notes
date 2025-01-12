@@ -37,9 +37,11 @@ export class SignInComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.signUpBtn.nativeElement.addEventListener("click", () => {
-      this.router.navigate(['/sign-up']);
-    });
+    if (this.signUpBtn) {
+      this.signUpBtn.nativeElement.addEventListener("click", () => {
+        this.router.navigate(['/sign-up']);
+      });
+    }
   }
 
   onSignUp(): void {

@@ -9,7 +9,6 @@ import { NotesEntity } from '../model/notes.entity';
   providedIn: 'root'
 })
 export class CategoriesService extends BaseService<CategoriesEntity> {
-
   protected override resourceEndpoint = '/categories';
   private categoriesSubject = new BehaviorSubject<CategoriesEntity[]>([]);
   categories$ = this.categoriesSubject.asObservable();
@@ -29,7 +28,6 @@ export class CategoriesService extends BaseService<CategoriesEntity> {
       }
     });
   }
-
 
   getCategoryById(id: number): Observable<CategoriesEntity> {
     return this.http.get<CategoriesEntity>(`${this.resourcePath()}/${id}`)
@@ -75,6 +73,4 @@ export class CategoriesService extends BaseService<CategoriesEntity> {
     return this.http.patch<void>(`${this.resourcePath()}/${id}/archive`, {}, this.httOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
-
-
 }

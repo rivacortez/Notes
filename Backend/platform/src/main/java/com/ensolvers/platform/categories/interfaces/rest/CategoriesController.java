@@ -8,6 +8,7 @@ import com.ensolvers.platform.categories.interfaces.rest.resources.CategoriesRes
 import com.ensolvers.platform.categories.interfaces.rest.resources.CreateCategoriesResource;
 import com.ensolvers.platform.categories.interfaces.rest.resources.UpdateCategoriesResource;
 import com.ensolvers.platform.categories.interfaces.rest.transform.CategoriesResourceFromEntityAssembler;
+import com.ensolvers.platform.iam.infrastructure.authorization.sfs.model.UserDetailsImpl;
 import com.ensolvers.platform.notes.interfaces.rest.resources.NotesResource;
 import com.ensolvers.platform.notes.interfaces.rest.transform.NotesResourceFromEntityAssembler;
 import com.ensolvers.platform.shared.interfaces.rest.resources.MessageResource;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.ensolvers.platform.notes.domain.model.aggregates.Notes;
 import java.util.List;
@@ -58,8 +60,9 @@ public class CategoriesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category created"),
             @ApiResponse(responseCode = "400", description = "Invalid input")})
-    public ResponseEntity<CategoriesResource> createCategory(@RequestBody CreateCategoriesResource resource) {
-        Categories category = categoriesCommandService.create(resource);
+    public ResponseEntity<CategoriesResource> createCategory(@RequestBody CreateCategoriesResource resource, Authentication authentication) {
+        Long userId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        Categories category = categoriesCommandService.create(resource, userId);
         CategoriesResource categoriesResource = CategoriesResourceFromEntityAssembler.toResourceFromEntity(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriesResource);
     }
@@ -77,8 +80,9 @@ public class CategoriesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category updated"),
             @ApiResponse(responseCode = "404", description = "Category not found")})
-    public ResponseEntity<CategoriesResource> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoriesResource resource) {
-        Categories category = categoriesCommandService.update(id, resource);
+    public ResponseEntity<CategoriesResource> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoriesResource resource, Authentication authentication) {
+        Long userId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        Categories category = categoriesCommandService.update(id, resource, userId);
         CategoriesResource categoriesResource = CategoriesResourceFromEntityAssembler.toResourceFromEntity(category);
         return ResponseEntity.ok(categoriesResource);
     }

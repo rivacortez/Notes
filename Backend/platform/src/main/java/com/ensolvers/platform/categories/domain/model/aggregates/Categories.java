@@ -17,9 +17,11 @@ public class Categories extends AuditableModel {
     @Column(nullable = false)
     private String color;
 
+    @Column(nullable = false)
+    private Long userId;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<NoteCategory> noteCategories;
-
 
     public Long getId() {
         return id;
@@ -43,6 +45,14 @@ public class Categories extends AuditableModel {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Set<NoteCategory> getNoteCategories() {

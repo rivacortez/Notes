@@ -56,7 +56,6 @@ export class SearchBarComponent implements OnInit {
     this.filterNotes();
   }
 
-
   selectCategory(category: CategoriesEntity | null): void {
     this.selectedCategory = category;
     this.filterNotes();

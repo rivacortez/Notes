@@ -38,7 +38,7 @@ public class IamContextFacadeImpl implements IamContextFacade {
     // inherited javadoc
     @Override
     public Long createUser(String username, String password) {
-        var signUpCommand = new SignUpCommand(username, password);
+        var signUpCommand = new SignUpCommand(username, password, "ROLE_USER");
         var result = userCommandService.handle(signUpCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();

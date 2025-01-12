@@ -9,6 +9,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +23,7 @@ public class User extends AuditableModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
     @Size(max = 50)
     private String username;
@@ -26,12 +32,16 @@ public class User extends AuditableModel {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    private String role;
+
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public String getPassword() {
@@ -43,7 +53,11 @@ public class User extends AuditableModel {
     }
 
     public Long getId() {
-
         return id;
+    }
+
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role));
     }
 }

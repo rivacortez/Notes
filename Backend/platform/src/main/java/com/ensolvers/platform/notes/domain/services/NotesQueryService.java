@@ -9,4 +9,5 @@ public interface NotesQueryService {
     List<Notes> findAll(Boolean archived);
 
     List<Categories> getCategoriesOfNote(Long noteId);
+    List<Notes> findAllByUserId(Long userId);
 }

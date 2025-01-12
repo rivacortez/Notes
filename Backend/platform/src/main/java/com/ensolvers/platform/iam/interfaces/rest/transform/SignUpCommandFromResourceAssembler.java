@@ -17,6 +17,6 @@ public class SignUpCommandFromResourceAssembler {
      * @return The SignUpCommand.
      */
     public static SignUpCommand toCommandFromResource(SignUpResource resource) {
-        return new SignUpCommand(resource.username(), resource.password());
+        return new SignUpCommand(resource.username(), resource.password(), resource.role());
     }
 }

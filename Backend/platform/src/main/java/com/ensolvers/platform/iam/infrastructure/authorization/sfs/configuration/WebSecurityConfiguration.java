@@ -122,7 +122,7 @@ public class WebSecurityConfiguration {
                 "/swagger-resources/**",
                 "/webjars/**"
         };
-        // Cross-Origin Resource Sharing configuration
+
         http.cors(configurer -> configurer.configurationSource(_ -> {
             var cors = new CorsConfiguration();
             cors.setAllowedOrigins(List.of("*"));
@@ -130,18 +130,12 @@ public class WebSecurityConfiguration {
             cors.setAllowedHeaders(List.of("*"));
             return cors;
         }));
-        // Cross-Site Request Forgery configuration
         http.csrf(customizer -> customizer.disable());
-        // Exception handling configuration
         http.exceptionHandling(configurer -> configurer.authenticationEntryPoint(unauthorizedRequestHandlerEntryPoint));
-        // Session management configuration
         http.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        // Authorize requests configuration
         http.authorizeHttpRequests(configurer -> configurer.requestMatchers(permittedRequestPatterns).permitAll()
-                        .anyRequest().authenticated());
-        // Authentication configuration
+                .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
-        // Authorization configuration
         http.addFilterBefore(authorizationRequestFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

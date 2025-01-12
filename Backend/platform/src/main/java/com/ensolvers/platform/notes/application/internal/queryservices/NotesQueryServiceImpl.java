@@ -8,6 +8,7 @@ import com.ensolvers.platform.notes.infrastructure.persistence.jpa.repositories.
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class NotesQueryServiceImpl implements NotesQueryService {
@@ -19,17 +20,22 @@ public class NotesQueryServiceImpl implements NotesQueryService {
 
     @Override
     public List<Notes> findAll(Boolean archived) {
-        if (archived == null) {
-            return notesRepository.findAll();
+        if (archived != null) {
+            return notesRepository.findAllByArchived(archived);
         }
-        return notesRepository.findAllByArchived(archived);
+        return notesRepository.findAll();
     }
 
     @Override
     public List<Categories> getCategoriesOfNote(Long noteId) {
-        Notes note = notesRepository.findById(noteId).orElseThrow();
+        Notes note = notesRepository.findById(noteId).orElseThrow(() -> new NoSuchElementException("Note not found with id: " + noteId));
         return note.getNoteCategories().stream()
                 .map(NoteCategory::getCategory)
                 .toList();
+    }
+
+    @Override
+    public List<Notes> findAllByUserId(Long userId) {
+        return notesRepository.findAllByUserId(userId);
     }
 }

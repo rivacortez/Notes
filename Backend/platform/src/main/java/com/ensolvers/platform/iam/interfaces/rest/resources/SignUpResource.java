@@ -18,5 +18,5 @@ import java.util.List;
  *                 It must not be empty.
  *
  */
-public record SignUpResource(String username, String password) {
+public record SignUpResource(String username, String password,String role) {
 }

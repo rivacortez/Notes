@@ -11,5 +11,5 @@ import java.util.List;
  *     It contains the username and password of the new user.
  * </p>
  */
-public record SignUpCommand(String username, String password) {
+public record SignUpCommand(String username, String password, String role) {
 }

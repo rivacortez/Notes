@@ -39,9 +39,11 @@ export class SignUpComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.signInBtn.nativeElement.addEventListener("click", () => {
-      this.router.navigate(['/sign-in']);
-    });
+    if (this.signInBtn) {
+      this.signInBtn.nativeElement.addEventListener("click", () => {
+        this.router.navigate(['/sign-in']);
+      });
+    }
   }
 
   onSignIn(): void {
@@ -52,10 +54,10 @@ export class SignUpComponent implements OnInit, AfterViewInit {
   onSubmitSignUp(): void {
     if (this.signUpForm.invalid) return;
     const { username, password } = this.signUpForm.value;
-    const signUpRequest = new SignUpRequest(username, password);
+    const signUpRequest = new SignUpRequest(username, password, 'ROLE_USER');
     this.authenticationService.signUp(signUpRequest).subscribe({
-      next: () => {
-        this.submittedSignUp = true;
+      next: (response) => {
+        console.log('SignUpResponse:', response);
         this.router.navigate(['/sign-in']);
       },
       error: (error) => {

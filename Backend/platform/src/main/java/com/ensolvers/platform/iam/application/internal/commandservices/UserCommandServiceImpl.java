@@ -45,7 +45,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         if (userRepository.existsByUsername(command.username()))
             throw new RuntimeException("Username already exists");
 
-        var user = new User(command.username(), hashingService.encode(command.password()));
+        var user = new User(command.username(), hashingService.encode(command.password()), command.role());
         userRepository.save(user);
         return userRepository.findByUsername(command.username());
     }
