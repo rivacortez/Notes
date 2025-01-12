@@ -52,7 +52,14 @@ export class CategoriesService extends BaseService<CategoriesEntity> {
   }
 
   deleteCategory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.resourcePath()}/${id}`, this.httOptions);
+    return this.http.delete<void>(`${this.resourcePath()}/${id}`, this.httOptions).pipe(
+      retry(2),
+      catchError(this.handleError),
+      tap(() => {
+        const currentCategories = this.categoriesSubject.value.filter(category => category.id !== id);
+        this.categoriesSubject.next(currentCategories);
+      })
+    );
   }
 
   getNotesOfCategory(categoryId: number): Observable<NotesEntity[]> {
