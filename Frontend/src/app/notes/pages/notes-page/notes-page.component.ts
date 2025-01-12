@@ -1,9 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SearchBarComponent} from '../../components/search-bar/search-bar.component';
 import {NotesListComponent} from '../../components/notes-list/notes-list.component';
 import {FloatingActionButtonComponent} from '../../components/floating-action-button/floating-action-button.component';
 import {NotesEntity} from '../../model/notes.entity';
 import {CategoriesEntity} from '../../model/categories.entity';
+import {AuthenticationService} from '../../../iam/services/authentication.service';
+import {Route, Router} from '@angular/router';
 
 @Component({
   selector: 'app-notes-page',
@@ -15,9 +17,19 @@ import {CategoriesEntity} from '../../model/categories.entity';
   templateUrl: './notes-page.component.html',
   styleUrl: './notes-page.component.css'
 })
-export class NotesPageComponent  {
+export class NotesPageComponent  implements OnInit{
   @ViewChild(NotesListComponent) notesListComponent!: NotesListComponent;
   @ViewChild(SearchBarComponent) searchBarComponent!: SearchBarComponent;
+  username: string = '';
+
+  constructor(private authenticationService: AuthenticationService,private router:Router) {}
+
+  ngOnInit(): void {
+    this.authenticationService.currentUsername.subscribe(username => {
+      this.username = username;
+    });
+  }
+
 
   ngAfterViewInit(): void {
     this.notesListComponent.notesUpdated.subscribe(() => {
@@ -37,5 +49,9 @@ export class NotesPageComponent  {
 
   onNotesFiltered(filteredNotes: NotesEntity[]): void {
     this.notesListComponent.notes = filteredNotes;
+  }
+  onLogout(): void {
+    this.authenticationService.signOut();
+    this.router.navigate(['/sign-in']);
   }
 }

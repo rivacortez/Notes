@@ -87,7 +87,13 @@ export class AuthenticationService {
   setUserId(userId: number): void {
     this.userIdSubject.next(userId);
   }
+  private userRolesSubject = new BehaviorSubject<string[]>([]);
+  currentUserRoles = this.userRolesSubject.asObservable();
 
+
+  setUserRoles(roles: string[]): void {
+    this.userRolesSubject.next(roles);
+  }
   /**
    * Signs out the current user
    * <p>

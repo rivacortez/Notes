@@ -1,3 +1,7 @@
+<div class="toolbar">
+  <span>Welcome, {{ username }}</span>
+  <button class="logout-btn" (click)="onLogout()">Logout</button>
+</div>
 <div class="notes-page">
   <app-search-bar (notesFiltered)="onNotesFiltered($event)"></app-search-bar>
   <app-notes-list></app-notes-list>
